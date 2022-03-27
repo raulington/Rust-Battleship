@@ -1,7 +1,7 @@
 # Board-Game-Challenge
 Board Game Bot Makers
 
-Raul Higareda - rauldh2, Anh Phung - anhnp2
+Raul Higareda - rauldh2, Anh Phung - anhnp2, Joseph Silberman - jrs11
 
 Project Introduction
 
