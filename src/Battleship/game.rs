@@ -20,6 +20,12 @@ pub struct ShipPieces {
     SUBMARINE // size 2
 }
 
+#[derive(Debug)]
+pub struct Node {
+    guess: false,
+    empty: true,
+}
+
 // Run Function - Raul
 // 1. Starts The game
 
