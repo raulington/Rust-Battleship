@@ -1,23 +1,29 @@
 #[derive(Debug, Default)]
 pub struct Battleship {
-    const kSize = 10;
-    let mut your_board: Vec<Vec<char>>;
-    let mut enemy_board: Vec<Vec<char>>;
+    // const kSize = 10;
+    pub your_board: Vec<Vec<Node>>,
+    pub enemy_board: Vec<Vec<Node>>,
 }
+pub const kSize: usize = 10;
+pub const kNo5 : usize= 1; // Number of Carrier
+pub const kNo4: usize = 1; // Number of Battleship
+pub const kNo3: usize = 1; // Number of Cruise
+pub const kNo2: usize = 1; // Number of Submarine
+
 
 #[derive(Debug)]
-pub struct ShipPieces {
+pub struct ShipPiecesError {
     pub error_type : HangmanErrorKind,
     pub error_msg : String,
     pub user_input: String
 }
 
 #[derive(Debug, PartialEq)]
-pub struct ShipPieces {
-    CARRIER, // size 5
-    BATTLESHIP, // size 4
-    CRUISE, // size 3
-    SUBMARINE // size 2
+pub enum ShipPieces {
+    Carrier, // size 5
+    Battleship, // size 4
+    Cruise, // size 3
+    Submarine // size 2
 }
 
 #[derive(Debug)]
@@ -27,19 +33,26 @@ pub struct Node {
 }
 
 impl Battleship {
-    pub fn new() -> Result<Self, HangmanError> {
+    pub fn new() -> Result<Self, ShipPiecesError> {
         let mut your_board = vec![Vec::new(); kSize];
         let mut enemy_board = vec![Vec::new(); kSize];
+        // Can spawn thread to do this faster if needed
         for vec in your_board {
-            let mut n = Node{false, true};
-            for i in 0..10 {
-                vec.push(n.copy());
+            for i in 0..10 {            
+                let mut n = Node {
+                    guess: false,
+                    empty : true,
+                };
+                vec.push(n);
             }
         }
         for vec in enemy_board {
-            let mut n = Node{false, true};
-            for i in 0..10 {
-                vec.push(n.copy());
+            for i in 0..10 {            
+                let mut n = Node {
+                    guess: false,
+                    empty : true,
+                };
+                vec.push(n);
             }
         }
         let battleship = Battleship{your_board, enemy_board};
@@ -53,7 +66,7 @@ impl Battleship {
             return 'X';
         }
         return 'O';
-    }
+    } 
 
     pub fn drawenemyboard(i: i32) -> char {
         Node n = enemy_board.get(i);

@@ -1,6 +1,7 @@
 use dialoguer::Input;
 use crate::battleship::game;
 
+
 /// Runs a Battleship game on the command line.
 #[derive(Debug, Default)]
 pub struct BattleshipRunner {
@@ -66,9 +67,9 @@ impl BattleshipRunner {
                 |---------------------------------------------------------------------|\n
                 | {am} | {bm} | {cm} | {dm} | {em} | {fm} | {gm} | {hm} | {im} | {jm} |\n
                 |---------------------------------------------------------------------|\n
-                | {an} | {bn} | {cn} | {dn} | {en} | {fn} | {gn} | {hn} | {inn} | {jn} |\n
+                | {an} | {bn} | {cn} | {dn} | {en} | {fn} | {gn} | {hn} | {in} | {jn} |\n
                 |---------------------------------------------------------------------|\n
-                | {ao} | {bo} | {co} | {doo} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n",
+                | {ao} | {bo} | {co} | {do} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n",
                 ai = g.drawenemyboard(0), bi = g.drawenemyboard(1), ci = g.drawenemyboard(2), di = g.drawenemyboard(3),
                 ei = g.drawenemyboard(4), fi = g.drawenemyboard(5), gi = g.drawenemyboard(6), hi = g.drawenemyboard(7),
                 ii = g.drawenemyboard(8), ji = g.drawenemyboard(9),
@@ -86,8 +87,8 @@ impl BattleshipRunner {
                 im = g.drawenemyboard(8), jm = g.drawenemyboard(9),
                 an = g.drawenemyboard(0), bn = g.drawenemyboard(1), cn = g.drawenemyboard(2), dn = g.drawenemyboard(3),
                 en = g.drawenemyboard(4), fn = g.drawenemyboard(5), gn = g.drawenemyboard(6), hn = g.drawenemyboard(7),
-                inn = g.drawenemyboard(8), jn = g.drawenemyboard(9),
-                ao = g.drawenemyboard(0), bo = g.drawenemyboard(1), co = g.drawenemyboard(2), doo = g.drawenemyboard(3),
+                in = g.drawenemyboard(8), jn = g.drawenemyboard(9),
+                ao = g.drawenemyboard(0), bo = g.drawenemyboard(1), co = g.drawenemyboard(2), do = g.drawenemyboard(3),
                 eo = g.drawenemyboard(4), fo = g.drawenemyboard(5), go = g.drawenemyboard(6), ho = g.drawenemyboard(7),
                 io = g.drawenemyboard(8), jo = g.drawenemyboard(9)
 
@@ -102,9 +103,9 @@ impl BattleshipRunner {
                 |---------------------------------------------------------------------|\n
                 | {am} | {bm} | {cm} | {dm} | {em} | {fm} | {gm} | {hm} | {im} | {jm} |\n
                 |---------------------------------------------------------------------|\n
-                | {an} | {bn} | {cn} | {dn} | {en} | {fn} | {gn} | {hn} | {inn} | {jn} |\n
+                | {an} | {bn} | {cn} | {dn} | {en} | {fn} | {gn} | {hn} | {in} | {jn} |\n
                 |---------------------------------------------------------------------|\n
-                | {ao} | {bo} | {co} | {doo} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n",
+                | {ao} | {bo} | {co} | {do} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n",
                 ai = g.drawyourboard(0), bi = g.drawyourboard(1), ci = g.drawyourboard(2), di = g.drawyourboard(3),
                 ei = g.drawyourboard(4), fi = g.drawyourboard(5), gi = g.drawyourboard(6), hi = g.drawyourboard(7),
                 ii = g.drawyourboard(8), ji = g.drawyourboard(9),
@@ -122,8 +123,8 @@ impl BattleshipRunner {
                 im = g.drawyourboard(8), jm = g.drawyourboard(9),
                 an = g.drawyourboard(0), bn = g.drawyourboard(1), cn = g.drawyourboard(2), dn = g.drawyourboard(3),
                 en = g.drawyourboard(4), fn = g.drawyourboard(5), gn = g.drawyourboard(6), hn = g.drawyourboard(7),
-                inn = g.drawyourboard(8), jn = g.drawyourboard(9),
-                ao = g.drawyourboard(0), bo = g.drawyourboard(1), co = g.drawyourboard(2), doo = g.drawyourboard(3),
+                in = g.drawyourboard(8), jn = g.drawyourboard(9),
+                ao = g.drawyourboard(0), bo = g.drawyourboard(1), co = g.drawyourboard(2), do = g.drawyourboard(3),
                 eo = g.drawyourboard(4), fo = g.drawyourboard(5), go = g.drawyourboard(6), ho = g.drawyourboard(7),
                 io = g.drawyourboard(8), jo = g.drawyourboard(9)
                 );
@@ -215,5 +216,199 @@ impl BattleshipRunner {
             };
         }
     }
+    // Player Place function, arguments: ship_type
+    fn Player_Place_1_ship(ship_type : ShipPieces) ->() {
+        let tuple_len_name : (i32,String) = match  ship_type {
+            ShipPieces::Carrier => (5, "Carrier"),
+            ShipPieces::Battleship => (4,"Battleship"),
+            ShipPieces::Cruise =>(3,"Cruise"),
+            ShipPieces::Submarine => (2,"Submarine"),
+        };
+        let mut start_pos: (usize, usize) = (0,0);
+        let mut end_pos :(usize,usize) = (0,0);
+        loop { // loop until a success start position
+        //asking for input
+            println!("Which row do you want your {name} of size {len} to start?" ,name = tuple_len_name[1],len = tuple_len_name[0]);
+            let input : String = Input::new()
+                .with_prompt(">")
+                .interact_text()?;
+
+            // Split the command line input by spaces
+            let args : Vec<&str> = input.trim().split(' ').collect();
+
+            // If there are 0 arguments, return an error
+            if args.len() == 0 {
+                println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                continue;
+            }
+            let row_start = match args[0] {
+                "1" => 0,
+                "2" => 1,
+                "3" => 2,
+                "4" => 3,
+                "5" => 4,
+                "6" => 5,
+                "7" => 6,
+                "8" => 7,
+                "9" => 8,
+                _ => {  println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                        continue; }
+            };
+            //asking for col
+            println!("Which col do you want your {name} of size {len} to start?" ,name = tuple_len_name[1],len = tuple_len_name[0]);
+            let input : String = Input::new()
+                .with_prompt(">")
+                .interact_text()?;
+
+            // Split the command line input by spaces
+            let args : Vec<&str> = input.trim().split(' ').collect();
+
+            // If there are 0 arguments, return an error
+            if args.len() == 0 {
+                println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                continue;
+            }
+            let col_start = match args[0] {
+                "1" => 0,
+                "2" => 1,
+                "3" => 2,
+                "4" => 3,
+                "5" => 4,
+                "6" => 5,
+                "7" => 6,
+                "8" => 7,
+                "9" => 8,
+                _ => {  println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                continue; }
+            };
+            if (Battleship::your_board[row_start][col_start].empty == true ) {
+                start_pos.0 = row_start;
+                start_pos.1 = col_start;
+                break;
+            } else {
+                println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                continue;
+            }
+            // Check for possible ways to put endpoint
+            let mut all_posible_end : Vec<(usize,usize)> = Vec::new();
+            let len : usize = tuple_len_name.0;
+            let row_start = start_pos.0;
+            let col_start = start_pos.1;
+            // Handle up first
+            if (start_pos.0 >= len - 1) {
+                for i in 0..len-1 {
+                    if (Battleship::your_board[row_start - i][col_start].empty == false) {
+                        continue;
+                    }
+                }
+                all_possible_end.push((row_start - len + 1,col_start));
+            }
+            // Handle down
+            if (row_start + len <= kSize  - 1) {
+                for i in 0..len-1 {
+                    if (Battleship::your_board[row_start + i][col_start].empty == false) {
+                        continue;
+                    }
+                }
+                all_possible_end.push((row_start + len ,col_start));
+            }
+            // Handle left 
+            if (col_start >= len - 1) {
+                for i in 0..len-1 {
+                    if (Battleship::your_board[row_start][col_start - i].empty == false) {
+                        continue;
+                    }
+                }
+                all_possible_end.push((row_start,col_start-len+1));
+            }
+            // Handle right
+            if (col_start + len <= kSize  - 1) {
+                for i in 0..len-1 {
+                    if (Battleship::your_board[row_start ][col_start+i].empty == false) {
+                        continue;
+                    }
+                }
+                all_possible_end.push((row_start , len+ col_start));
+            }
+            for i in 0..all_possible_end.size() {
+                println!("{no} - ({row},{col})", 
+                    no = i + 1,
+                    row = all_possible_end[i].0,
+                    col = all_possible_end[i].1,)
+            }
+            loop { // loop until get endpoint
+                //asking for input
+                println!("Which position do you want your {name} of size {len} to end?" ,name = tuple_len_name[1],len = tuple_len_name[0]);
+                let input : String = Input::new()
+                    .with_prompt(">")
+                    .interact_text()?;
+        
+                // Split the command line input by spaces
+                let args : Vec<&str> = input.trim().split(' ').collect();
+    
+                // If there are 0 arguments, return an error
+                if args.len() == 0 {
+                    println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                    continue;
+                }
+                if (args[0] >= all_possible_end.size() || args[0] < 0) {
+                    println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                    continue;
+                } 
+                let end_choice:usize = match args[0] {
+                    "1" => 0,
+                    "2" => 1,
+                    "3" => 2,
+                    "4" => 3,
+                };
+                end_pos = all_possible_end[end_choice];
+                break;
+            } /// Finished getting start_pos and end_pos
+        }
+        if (start_pos.0 == end_pos.0) {
+            if (start_pos.1 < end_pos.1) {
+                for i in start_pos.1..end_pos.1 {
+                    Battleship::your_board[start_pos.0][i].empty = false;
+                }
+            } else {
+                for i in end_pos.1..start_pos.1 {
+                    Battleship::your_board[start_pos.0][i].empty = false;
+                }
+            }
+        } else {
+            if (start_pos.0 < end_pos.0) {
+                for i in start_pos.0..end_pos.0 {
+                    Battleship::your_board[i][start_pos.1].empty = false;
+                }
+            } else {
+                for i in end_pos.0..start_pos.0 {
+                    Battleship::your_board[i][start_pos.1].empty = false;
+                }
+            }
+        }
+        // Finished placing
+    } 
+    fn Player_Place() {
+        for row in 0..kSize-1 {
+            for col in 0..kSize-1 {
+                if (Battleship::your_board[row][col].empty == false || Battleship::your_board[row][col].guess == true) {
+                    panic!("Place in a already worked on board");
+                }
+            }
+        }
+        for i in 0..kNo5 - 1 {
+            Player_Place_1_ship(Battleship::Carrier);
+        }
+        for i in 0..kNo4 -1 {
+            Player_Place_1_ship(Battleship::Battleship);
+        }
+        for i in 0..kNo3-1 {
+            Player_Place_1_ship(Battleship::Cruise);
+        }
+        for i in 0..kNo2-1 {
+            Player_Place_1_ship(Battleship::Submarine);
+        }
+       print!("All ships being placed, ready to game!")
+    }  
 }
 
