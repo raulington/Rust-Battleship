@@ -15,7 +15,6 @@ pub fn coordinate_converter(coord: &str) -> Result<(i32, i32), ()> {
             variables.push(all[i]);
         }
     }
-
     let mut num: i32 = -1;
     if variables.len() != 2 && variables.len() != 3 {
         return Err(());

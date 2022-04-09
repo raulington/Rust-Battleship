@@ -57,21 +57,23 @@ impl Battleship {
                 vec.push(n.clone());
             }
         }
-        let battleship = Battleship{your_board, enemy_board};
+        let battleship = Battleship{
+            your_board: your_board.clone(), 
+            enemy_board: enemy_board.clone()};
         return Ok(battleship);
     }
 
     // Returns X is guess is true and empty is false, O is guess is false
-    pub fn drawyourboard(&self, i: i32, j: i32) -> char {
-        let n = self.your_board.get(i).get(j);
+    pub fn drawyourboard(&self, i: usize, j: usize) -> char {
+        let n = self.your_board.get(i).unwrap().get(j).unwrap();
         if (n.guess == true && n.empty == false) {
             return 'X';
         }
         return 'O';
     } 
 
-    pub fn drawenemyboard(&self, i: i32, j: i32) -> char {
-        let n = self.enemy_board.get(i).get(j);
+    pub fn drawenemyboard(&self, i: usize, j: usize) -> char {
+        let n = self.enemy_board.get(i).unwrap().get(j).unwrap();
         if (n.guess == true && n.empty == false) {
             return 'X';
         }
@@ -87,7 +89,7 @@ impl Battleship {
     //    2. Make it so that you can't attack until you have placed all of your pieces
     //    3. Once one piece has been placed, the terminal will print what pieces are left to be made
     // Player Place function, arguments: ship_type
-    pub fn Player_Place_1_ship(&self,ship_type : ShipPieces) ->() {
+    pub fn Player_Place_1_ship(&mut self,ship_type : ShipPieces) ->() {
         let tuple_len_name : (usize,String) = match  ship_type {
             ShipPieces::Carrier => (5, "Carrier".to_string()),
             ShipPieces::Battleship => (4,"Battleship".to_string()),
@@ -231,7 +233,7 @@ impl Battleship {
                 end_pos = all_possible_end[end_choice];
                 done = true;
             } 
-            /// Finished getting start_pos and end_pos
+            // Finished getting start_pos and end_pos
         }
         if start_pos.0 == end_pos.0 {
             if start_pos.1 < end_pos.1 {
@@ -256,7 +258,7 @@ impl Battleship {
         }
         // Finished placing
     } 
-    pub fn Player_Place(&self) {
+    pub fn Player_Place(&mut self) {
         for row in 0..kSize-1 {
             for col in 0..kSize-1 {
                 if self.your_board[row][col].empty == false || self.your_board[row][col].guess == true {
