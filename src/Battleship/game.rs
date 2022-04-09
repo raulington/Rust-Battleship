@@ -1,3 +1,5 @@
+use dialoguer::Input;
+
 #[derive(Debug, Default)]
 pub struct Battleship {
     // const kSize = 10;
@@ -13,7 +15,7 @@ pub const kNo2: usize = 1; // Number of Submarine
 
 #[derive(Debug)]
 pub struct ShipPiecesError {
-    pub error_type : BattleshipErrorKind,
+    pub error_type : String,
     pub error_msg : String,
     pub user_input: String
 }
@@ -26,7 +28,7 @@ pub enum ShipPieces {
     Submarine // size 2
 }
 
-#[derive(Debug)]
+#[derive(Debug,Clone,Copy)]
 pub struct Node {
     guess: bool,
     empty: bool,
@@ -43,7 +45,7 @@ impl Battleship {
                     guess: false,
                     empty : true,
                 };
-                vec.push(n);
+                vec.push(n.clone());
             }
         }
         for vec in enemy_board {
@@ -52,7 +54,7 @@ impl Battleship {
                     guess: false,
                     empty : true,
                 };
-                vec.push(n);
+                vec.push(n.clone());
             }
         }
         let battleship = Battleship{your_board, enemy_board};
@@ -60,17 +62,17 @@ impl Battleship {
     }
 
     // Returns X is guess is true and empty is false, O is guess is false
-    pub fn drawyourboard(i: i32) -> char {
-        let n = your_board.get(i);
-        if (n.guess == true && empty == false) {
+    pub fn drawyourboard(&self, i: i32) -> char {
+        let n = self.your_board.get(i);
+        if (n.guess == true && n.empty == false) {
             return 'X';
         }
         return 'O';
     } 
 
-    pub fn drawenemyboard(i: i32) -> char {
-        let n = enemy_board.get(i);
-        if (n.guess == true && empty == false) {
+    pub fn drawenemyboard(&self, i: i32) -> char {
+        let n = self.enemy_board.get(i);
+        if (n.guess == true && n.empty == false) {
             return 'X';
         }
         return 'O';
@@ -85,28 +87,29 @@ impl Battleship {
     //    2. Make it so that you can't attack until you have placed all of your pieces
     //    3. Once one piece has been placed, the terminal will print what pieces are left to be made
     // Player Place function, arguments: ship_type
-    fn Player_Place_1_ship(ship_type : ShipPieces) ->() {
-        let tuple_len_name : (i32,String) = match  ship_type {
-            ShipPieces::Carrier => (5, "Carrier"),
-            ShipPieces::Battleship => (4,"Battleship"),
-            ShipPieces::Cruise =>(3,"Cruise"),
-            ShipPieces::Submarine => (2,"Submarine"),
+    pub fn Player_Place_1_ship(&self,ship_type : ShipPieces) ->() {
+        let tuple_len_name : (usize,String) = match  ship_type {
+            ShipPieces::Carrier => (5, "Carrier".to_string()),
+            ShipPieces::Battleship => (4,"Battleship".to_string()),
+            ShipPieces::Cruise =>(3,"Cruise".to_string()),
+            ShipPieces::Submarine => (2,"Submarine".to_string()),
         };
         let mut start_pos: (usize, usize) = (0,0);
         let mut end_pos :(usize,usize) = (0,0);
-        loop { // loop until a success start position
+        let mut done: bool = false;
+        while (!done) { // loop until a success start position
         //asking for input
-            println!("Which row do you want your {name} of size {len} to start?" ,name = tuple_len_name[1],len = tuple_len_name[0]);
+            println!("Which row do you want your {name} of size {len} to start?" ,name = tuple_len_name.1,len = tuple_len_name.0);
             let input : String = Input::new()
                 .with_prompt(">")
-                .interact_text()?;
+                .interact_text().unwrap();
 
             // Split the command line input by spaces
             let args : Vec<&str> = input.trim().split(' ').collect();
 
             // If there are 0 arguments, return an error
             if args.len() == 0 {
-                println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                println!("Bad args");
                 continue;
             }
             let row_start = match args[0] {
@@ -119,21 +122,21 @@ impl Battleship {
                 "7" => 6,
                 "8" => 7,
                 "9" => 8,
-                _ => {  println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                _ => {  println!("Bad args");
                         continue; }
             };
             //asking for col
-            println!("Which col do you want your {name} of size {len} to start?" ,name = tuple_len_name[1],len = tuple_len_name[0]);
+            println!("Which col do you want your {name} of size {len} to start?" ,name = tuple_len_name.1,len = tuple_len_name.0);
             let input : String = Input::new()
                 .with_prompt(">")
-                .interact_text()?;
+                .interact_text().unwrap();
 
             // Split the command line input by spaces
             let args : Vec<&str> = input.trim().split(' ').collect();
 
             // If there are 0 arguments, return an error
             if args.len() == 0 {
-                println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                println!("Bad args");
                 continue;
             }
             let col_start = match args[0] {
@@ -146,26 +149,25 @@ impl Battleship {
                 "7" => 6,
                 "8" => 7,
                 "9" => 8,
-                _ => {  println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                _ => {  println!("Bad args");
                 continue; }
             };
-            if (Battleship::your_board[row_start][col_start].empty == true ) {
+            if (self.your_board[row_start][col_start].empty == true ) {
                 start_pos.0 = row_start;
                 start_pos.1 = col_start;
-                break;
             } else {
-                println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                println!("Bad args");
                 continue;
             }
             // Check for possible ways to put endpoint
-            let mut all_posible_end : Vec<(usize,usize)> = Vec::new();
+            let mut all_possible_end : Vec<(usize,usize)> = Vec::new();
             let len : usize = tuple_len_name.0;
             let row_start = start_pos.0;
             let col_start = start_pos.1;
             // Handle up first
             if (start_pos.0 >= len - 1) {
                 for i in 0..len-1 {
-                    if (Battleship::your_board[row_start - i][col_start].empty == false) {
+                    if (self.your_board[row_start - i][col_start].empty == false) {
                         continue;
                     }
                 }
@@ -174,7 +176,7 @@ impl Battleship {
             // Handle down
             if (row_start + len <= kSize  - 1) {
                 for i in 0..len-1 {
-                    if (Battleship::your_board[row_start + i][col_start].empty == false) {
+                    if (self.your_board[row_start + i][col_start].empty == false) {
                         continue;
                     }
                 }
@@ -183,7 +185,7 @@ impl Battleship {
             // Handle left 
             if (col_start >= len - 1) {
                 for i in 0..len-1 {
-                    if (Battleship::your_board[row_start][col_start - i].empty == false) {
+                    if (self.your_board[row_start][col_start - i].empty == false) {
                         continue;
                     }
                 }
@@ -192,89 +194,87 @@ impl Battleship {
             // Handle right
             if (col_start + len <= kSize  - 1) {
                 for i in 0..len-1 {
-                    if (Battleship::your_board[row_start ][col_start+i].empty == false) {
+                    if (self.your_board[row_start ][col_start+i].empty == false) {
                         continue;
                     }
                 }
                 all_possible_end.push((row_start , len+ col_start));
             }
-            for i in 0..all_possible_end.size() {
+            for i in 0..all_possible_end.len() {
                 println!("{no} - ({row},{col})", 
                     no = i + 1,
                     row = all_possible_end[i].0,
                     col = all_possible_end[i].1,)
             }
-            loop { // loop until get endpoint
+            while !done { // loop until get endpoint
                 //asking for input
-                println!("Which position do you want your {name} of size {len} to end?" ,name = tuple_len_name[1],len = tuple_len_name[0]);
+                println!("Which position do you want your {name} of size {len} to end?" ,name = tuple_len_name.1,len = tuple_len_name.0);
                 let input : String = Input::new()
                     .with_prompt(">")
-                    .interact_text()?;
+                    .interact_text().unwrap();
         
                 // Split the command line input by spaces
                 let args : Vec<&str> = input.trim().split(' ').collect();
     
                 // If there are 0 arguments, return an error
                 if args.len() == 0 {
-                    println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
+                    println!("Bad args");
                     continue;
                 }
-                if (args[0] >= all_possible_end.size() || args[0] < 0) {
-                    println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
-                    continue;
-                } 
                 let end_choice:usize = match args[0] {
                     "1" => 0,
                     "2" => 1,
                     "3" => 2,
                     "4" => 3,
+                    _ =>panic!("Bad args")
                 };
                 end_pos = all_possible_end[end_choice];
-                break;
-            } /// Finished getting start_pos and end_pos
+                done = true;
+            } 
+            /// Finished getting start_pos and end_pos
         }
         if (start_pos.0 == end_pos.0) {
             if (start_pos.1 < end_pos.1) {
                 for i in start_pos.1..end_pos.1 {
-                    Battleship::your_board[start_pos.0][i].empty = false;
+                    self.your_board[start_pos.0][i].empty = false;
                 }
             } else {
                 for i in end_pos.1..start_pos.1 {
-                    Battleship::your_board[start_pos.0][i].empty = false;
+                    self.your_board[start_pos.0][i].empty = false;
                 }
             }
         } else {
             if (start_pos.0 < end_pos.0) {
                 for i in start_pos.0..end_pos.0 {
-                    Battleship::your_board[i][start_pos.1].empty = false;
+                    self.your_board[i][start_pos.1].empty = false;
                 }
             } else {
                 for i in end_pos.0..start_pos.0 {
-                    Battleship::your_board[i][start_pos.1].empty = false;
+                    self.your_board[i][start_pos.1].empty = false;
                 }
             }
         }
         // Finished placing
     } 
-    fn Player_Place() {
+    pub fn Player_Place(&self) {
         for row in 0..kSize-1 {
             for col in 0..kSize-1 {
-                if (Battleship::your_board[row][col].empty == false || Battleship::your_board[row][col].guess == true) {
+                if (self.your_board[row][col].empty == false || self.your_board[row][col].guess == true) {
                     panic!("Place in a already worked on board");
                 }
             }
         }
         for i in 0..kNo5 - 1 {
-            Player_Place_1_ship(Battleship::Carrier);
+            Battleship::Player_Place_1_ship(self,ShipPieces::Carrier);
         }
         for i in 0..kNo4 -1 {
-            Player_Place_1_ship(Battleship::Battleship);
+            Battleship::Player_Place_1_ship(self,ShipPieces::Battleship);
         }
         for i in 0..kNo3-1 {
-            Player_Place_1_ship(Battleship::Cruise);
+            Battleship::Player_Place_1_ship(self,ShipPieces::Cruise);
         }
         for i in 0..kNo2-1 {
-            Player_Place_1_ship(Battleship::Submarine);
+            Battleship::Player_Place_1_ship(self,ShipPieces::Submarine);
         }
        print!("All ships being placed, ready to game!")
     }  
