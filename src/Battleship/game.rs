@@ -62,16 +62,16 @@ impl Battleship {
     }
 
     // Returns X is guess is true and empty is false, O is guess is false
-    pub fn drawyourboard(&self, i: i32) -> char {
-        let n = self.your_board.get(i);
+    pub fn drawyourboard(&self, i: i32, j: i32) -> char {
+        let n = self.your_board.get(i).get(j);
         if (n.guess == true && n.empty == false) {
             return 'X';
         }
         return 'O';
     } 
 
-    pub fn drawenemyboard(&self, i: i32) -> char {
-        let n = self.enemy_board.get(i);
+    pub fn drawenemyboard(&self, i: i32, j: i32) -> char {
+        let n = self.enemy_board.get(i).get(j);
         if (n.guess == true && n.empty == false) {
             return 'X';
         }

@@ -66,29 +66,43 @@ impl BattleshipRunner {
                 |---------------------------------------------------------------------|\n
                 | {an} | {bn} | {cn} | {dn} | {en} | {ffn} | {gn} | {hn} | {iin} | {jn} |\n
                 |---------------------------------------------------------------------|\n
-                | {ao} | {bo} | {co} | {doo} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n",
-                ai = g.drawenemyboard(0), bi = g.drawenemyboard(1), ci = g.drawenemyboard(2), di = g.drawenemyboard(3),
-                ei = g.drawenemyboard(4), fi = g.drawenemyboard(5), gi = g.drawenemyboard(6), hi = g.drawenemyboard(7),
-                ii = g.drawenemyboard(8), ji = g.drawenemyboard(9),
-                aj = g.drawenemyboard(0), bj = g.drawenemyboard(1), cj = g.drawenemyboard(2), dj = g.drawenemyboard(3),
-                ej = g.drawenemyboard(4), fj = g.drawenemyboard(5), gj = g.drawenemyboard(6), hj = g.drawenemyboard(7),
-                ij = g.drawenemyboard(8), jj = g.drawenemyboard(9),
-                ak = g.drawenemyboard(0), bk = g.drawenemyboard(1), ck = g.drawenemyboard(2), dk = g.drawenemyboard(3),
-                ek = g.drawenemyboard(4), fk = g.drawenemyboard(5), gk = g.drawenemyboard(6), hk = g.drawenemyboard(7),
-                ik = g.drawenemyboard(8), jk = g.drawenemyboard(9),
-                al = g.drawenemyboard(0), bl = g.drawenemyboard(1), cl = g.drawenemyboard(2), dl = g.drawenemyboard(3),
-                el = g.drawenemyboard(4), fl = g.drawenemyboard(5), gl = g.drawenemyboard(6), hl = g.drawenemyboard(7),
-                il = g.drawenemyboard(8), jl = g.drawenemyboard(9),
-                am = g.drawenemyboard(0), bm = g.drawenemyboard(1), cm = g.drawenemyboard(2), dm = g.drawenemyboard(3),
-                em = g.drawenemyboard(4), fm = g.drawenemyboard(5), gm = g.drawenemyboard(6), hm = g.drawenemyboard(7),
-                im = g.drawenemyboard(8), jm = g.drawenemyboard(9),
-                an = g.drawenemyboard(0), bn = g.drawenemyboard(1), cn = g.drawenemyboard(2), dn = g.drawenemyboard(3),
-                en = g.drawenemyboard(4), ffn = g.drawenemyboard(5), gn = g.drawenemyboard(6), hn = g.drawenemyboard(7),
-                iin = g.drawenemyboard(8), jn = g.drawenemyboard(9),
-                ao = g.drawenemyboard(0), bo = g.drawenemyboard(1), co = g.drawenemyboard(2), doo = g.drawenemyboard(3),
-                eo = g.drawenemyboard(4), fo = g.drawenemyboard(5), go = g.drawenemyboard(6), ho = g.drawenemyboard(7),
-                io = g.drawenemyboard(8), jo = g.drawenemyboard(9)
-
+                | {ao} | {bo} | {co} | {doo} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n
+                |---------------------------------------------------------------------|\n
+                | {ap} | {bp} | {cp} | {dp} | {ep} | {fp} | {gp} | {hp} | {ip} | {jp} |\n
+                |---------------------------------------------------------------------|\n
+                | {aq} | {bq} | {cq} | {dq} | {eq} | {fq} | {gq} | {hq} | {iq} | {jq} |\n
+                |---------------------------------------------------------------------|\n
+                | {ar} | {br} | {cr} | {dr} | {er} | {fr} | {gr} | {hr} | {ir} | {jr} |\n",
+                ai = g.drawenemyboard(0, 0), bi = g.drawenemyboard(0, 1), ci = g.drawenemyboard(0, 2), di = g.drawenemyboard(0, 3),
+                ei = g.drawenemyboard(0, 4), fi = g.drawenemyboard(0, 5), gi = g.drawenemyboard(0, 6), hi = g.drawenemyboard(0, 7),
+                ii = g.drawenemyboard(0, 8), ji = g.drawenemyboard(0, 9),
+                aj = g.drawenemyboard(1, 0), bj = g.drawenemyboard(1, 1), cj = g.drawenemyboard(1, 2), dj = g.drawenemyboard(1, 3),
+                ej = g.drawenemyboard(1, 4), fj = g.drawenemyboard(1, 5), gj = g.drawenemyboard(1, 6), hj = g.drawenemyboard(1, 7),
+                ij = g.drawenemyboard(1, 8), jj = g.drawenemyboard(1, 9),
+                ak = g.drawenemyboard(2, 0), bk = g.drawenemyboard(2, 1), ck = g.drawenemyboard(2, 2), dk = g.drawenemyboard(2, 3),
+                ek = g.drawenemyboard(2, 4), fk = g.drawenemyboard(2, 5), gk = g.drawenemyboard(2, 6), hk = g.drawenemyboard(2, 7),
+                ik = g.drawenemyboard(2, 8), jk = g.drawenemyboard(2, 9),
+                al = g.drawenemyboard(3, 0), bl = g.drawenemyboard(3, 1), cl = g.drawenemyboard(2), dl = g.drawenemyboard(3, 3),
+                el = g.drawenemyboard(3, 4), fl = g.drawenemyboard(3, 5), gl = g.drawenemyboard(6), hl = g.drawenemyboard(3, 7),
+                il = g.drawenemyboard(3, 8), jl = g.drawenemyboard(3, 9),
+                am = g.drawenemyboard(4, 0), bm = g.drawenemyboard(4, 1), cm = g.drawenemyboard(4, 2), dm = g.drawenemyboard(4, 3),
+                em = g.drawenemyboard(4, 4), fm = g.drawenemyboard(4, 5), gm = g.drawenemyboard(4, 6), hm = g.drawenemyboard(4, 7),
+                im = g.drawenemyboard(4, 8), jm = g.drawenemyboard(4, 9),
+                an = g.drawenemyboard(5, 0), bn = g.drawenemyboard(5, 1), cn = g.drawenemyboard(5, 2), dn = g.drawenemyboard(5, 3),
+                en = g.drawenemyboard(5, 4), ffn = g.drawenemyboard(5, 5), gn = g.drawenemyboard(5, 6), hn = g.drawenemyboard(5, 7),
+                iin = g.drawenemyboard(5, 8), jn = g.drawenemyboard(5, 9),
+                ao = g.drawenemyboard(6, 0), bo = g.drawenemyboard(6, 1), co = g.drawenemyboard(6, 2), doo = g.drawenemyboard(6, 3),
+                eo = g.drawenemyboard(6, 4), fo = g.drawenemyboard(6, 5), go = g.drawenemyboard(6, 6), ho = g.drawenemyboard(6, 7),
+                io = g.drawenemyboard(6, 8), jo = g.drawenemyboard(6, 9),
+                ap = g.drawenemyboard(7, 0), bp = g.drawenemyboard(7, 1), cp = g.drawenemyboard(7, 2), dp = g.drawenemyboard(7, 3),
+                ep = g.drawenemyboard(7, 4), fp = g.drawenemyboard(7, 5), gp = g.drawenemyboard(7, 6), hp = g.drawenemyboard(7, 7),
+                ip = g.drawenemyboard(7, 8), jp = g.drawenemyboard(7, 9),
+                aq = g.drawenemyboard(8, 0), bq = g.drawenemyboard(8, 1), cq = g.drawenemyboard(8, 2), dq = g.drawenemyboard(8, 3),
+                eq = g.drawenemyboard(8, 4), fq = g.drawenemyboard(8, 5), gq = g.drawenemyboard(8, 6), hq = g.drawenemyboard(8, 7),
+                iq = g.drawenemyboard(8, 8), jq = g.drawenemyboard(8, 9),
+                ar = g.drawenemyboard(9, 0), br = g.drawenemyboard(9, 1), cr = g.drawenemyboard(9, 2), dr = g.drawenemyboard(9, 3),
+                er = g.drawenemyboard(9, 4), fr = g.drawenemyboard(9, 5), gr = g.drawenemyboard(9, 6), hr = g.drawenemyboard(9, 7),
+                ir = g.drawenemyboard(9, 8), jr = g.drawenemyboard(9, 9)
                 ), b = "\n", c = format!("Your Board: \n
                 | {ai} | {bi} | {ci} | {di} | {ei} | {fi} | {gi} | {hi} | {ii} | {ji} |\n
                 |---------------------------------------------------------------------|\n
@@ -102,28 +116,43 @@ impl BattleshipRunner {
                 |---------------------------------------------------------------------|\n
                 | {an} | {bn} | {cn} | {dn} | {en} | {ffn} | {gn} | {hn} | {iin} | {jn} |\n
                 |---------------------------------------------------------------------|\n
-                | {ao} | {bo} | {co} | {doo} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n",
-                ai = g.drawyourboard(0), bi = g.drawyourboard(1), ci = g.drawyourboard(2), di = g.drawyourboard(3),
-                ei = g.drawyourboard(4), fi = g.drawyourboard(5), gi = g.drawyourboard(6), hi = g.drawyourboard(7),
-                ii = g.drawyourboard(8), ji = g.drawyourboard(9),
-                aj = g.drawyourboard(0), bj = g.drawyourboard(1), cj = g.drawyourboard(2), dj = g.drawyourboard(3),
-                ej = g.drawyourboard(4), fj = g.drawyourboard(5), gj = g.drawyourboard(6), hj = g.drawyourboard(7),
-                ij = g.drawyourboard(8), jj = g.drawyourboard(9),
-                ak = g.drawyourboard(0), bk = g.drawyourboard(1), ck = g.drawyourboard(2), dk = g.drawyourboard(3),
-                ek = g.drawyourboard(4), fk = g.drawyourboard(5), gk = g.drawyourboard(6), hk = g.drawyourboard(7),
-                ik = g.drawyourboard(8), jk = g.drawyourboard(9),
-                al = g.drawyourboard(0), bl = g.drawyourboard(1), cl = g.drawyourboard(2), dl = g.drawyourboard(3),
-                el = g.drawyourboard(4), fl = g.drawyourboard(5), gl = g.drawyourboard(6), hl = g.drawyourboard(7),
-                il = g.drawyourboard(8), jl = g.drawyourboard(9),
-                am = g.drawyourboard(0), bm = g.drawyourboard(1), cm = g.drawyourboard(2), dm = g.drawyourboard(3),
-                em = g.drawyourboard(4), fm = g.drawyourboard(5), gm = g.drawyourboard(6), hm = g.drawyourboard(7),
-                im = g.drawyourboard(8), jm = g.drawyourboard(9),
-                an = g.drawyourboard(0), bn = g.drawyourboard(1), cn = g.drawyourboard(2), dn = g.drawyourboard(3),
-                en = g.drawyourboard(4), ffn = g.drawyourboard(5), gn = g.drawyourboard(6), hn = g.drawyourboard(7),
-                iin = g.drawyourboard(8), jn = g.drawyourboard(9),
-                ao = g.drawyourboard(0), bo = g.drawyourboard(1), co = g.drawyourboard(2), doo = g.drawyourboard(3),
-                eo = g.drawyourboard(4), fo = g.drawyourboard(5), go = g.drawyourboard(6), ho = g.drawyourboard(7),
-                io = g.drawyourboard(8), jo = g.drawyourboard(9)
+                | {ao} | {bo} | {co} | {doo} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n
+                |---------------------------------------------------------------------|\n
+                | {ap} | {bp} | {cp} | {dp} | {ep} | {fp} | {gp} | {hp} | {ip} | {jp} |\n
+                |---------------------------------------------------------------------|\n
+                | {aq} | {bq} | {cq} | {dq} | {eq} | {fq} | {gq} | {hq} | {iq} | {jq} |\n
+                |---------------------------------------------------------------------|\n
+                | {ar} | {br} | {cr} | {dr} | {er} | {fr} | {gr} | {hr} | {ir} | {jr} |\n",
+                ai = g.drawyourboard(0, 0), bi = g.drawyourboard(0, 1), ci = g.drawyourboard(0, 2), di = g.drawyourboard(0, 3),
+                ei = g.drawyourboard(0, 4), fi = g.drawyourboard(0, 5), gi = g.drawyourboard(0, 6), hi = g.drawyourboard(0, 7),
+                ii = g.drawyourboard(0, 8), ji = g.drawyourboard(0, 9),
+                aj = g.drawyourboard(1, 0), bj = g.drawyourboard(1, 1), cj = g.drawyourboard(1, 2), dj = g.drawyourboard(1, 3),
+                ej = g.drawyourboard(1, 4), fj = g.drawyourboard(1, 5), gj = g.drawyourboard(1, 6), hj = g.drawyourboard(1, 7),
+                ij = g.drawyourboard(1, 8), jj = g.drawyourboard(1, 9),
+                ak = g.drawyourboard(2, 0), bk = g.drawyourboard(2, 1), ck = g.drawyourboard(2, 2), dk = g.drawyourboard(2, 3),
+                ek = g.drawyourboard(2, 4), fk = g.drawyourboard(2, 5), gk = g.drawyourboard(2, 6), hk = g.drawyourboard(2, 7),
+                ik = g.drawyourboard(2, 8), jk = g.drawyourboard(2, 9),
+                al = g.drawyourboard(3, 0), bl = g.drawyourboard(3, 1), cl = g.drawyourboard(2), dl = g.drawyourboard(3, 3),
+                el = g.drawyourboard(3, 4), fl = g.drawyourboard(3, 5), gl = g.drawyourboard(6), hl = g.drawyourboard(3, 7),
+                il = g.drawyourboard(3, 8), jl = g.drawyourboard(3, 9),
+                am = g.drawyourboard(4, 0), bm = g.drawyourboard(4, 1), cm = g.drawyourboard(4, 2), dm = g.drawyourboard(4, 3),
+                em = g.drawyourboard(4, 4), fm = g.drawyourboard(4, 5), gm = g.drawyourboard(4, 6), hm = g.drawyourboard(4, 7),
+                im = g.drawyourboard(4, 8), jm = g.drawyourboard(4, 9),
+                an = g.drawyourboard(5, 0), bn = g.drawyourboard(5, 1), cn = g.drawyourboard(5, 2), dn = g.drawyourboard(5, 3),
+                en = g.drawyourboard(5, 4), ffn = g.drawyourboard(5, 5), gn = g.drawyourboard(5, 6), hn = g.drawyourboard(5, 7),
+                iin = g.drawyourboard(5, 8), jn = g.drawyourboard(5, 9),
+                ao = g.drawyourboard(6, 0), bo = g.drawyourboard(6, 1), co = g.drawyourboard(6, 2), doo = g.drawyourboard(6, 3),
+                eo = g.drawyourboard(6, 4), fo = g.drawyourboard(6, 5), go = g.drawyourboard(6, 6), ho = g.drawyourboard(6, 7),
+                io = g.drawyourboard(6, 8), jo = g.drawyourboard(6, 9),
+                ap = g.drawyourboard(7, 0), bp = g.drawyourboard(7, 1), cp = g.drawyourboard(7, 2), dp = g.drawyourboard(7, 3),
+                ep = g.drawyourboard(7, 4), fp = g.drawyourboard(7, 5), gp = g.drawyourboard(7, 6), hp = g.drawyourboard(7, 7),
+                ip = g.drawyourboard(7, 8), jp = g.drawyourboard(7, 9),
+                aq = g.drawyourboard(8, 0), bq = g.drawyourboard(8, 1), cq = g.drawyourboard(8, 2), dq = g.drawyourboard(8, 3),
+                eq = g.drawyourboard(8, 4), fq = g.drawyourboard(8, 5), gq = g.drawyourboard(8, 6), hq = g.drawyourboard(8, 7),
+                iq = g.drawyourboard(8, 8), jq = g.drawyourboard(8, 9),
+                ar = g.drawyourboard(9, 0), br = g.drawyourboard(9, 1), cr = g.drawyourboard(9, 2), dr = g.drawyourboard(9, 3),
+                er = g.drawyourboard(9, 4), fr = g.drawyourboard(9, 5), gr = g.drawyourboard(9, 6), hr = g.drawyourboard(9, 7),
+                ir = g.drawyourboard(9, 8), jr = g.drawyourboard(9, 9)
                 ));
                 println!("Board Status: {}", status);
             },
