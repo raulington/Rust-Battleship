@@ -97,7 +97,7 @@ impl Battleship {
         let mut start_pos: (usize, usize) = (0,0);
         let mut end_pos :(usize,usize) = (0,0);
         let mut done: bool = false;
-        while (!done) { // loop until a success start position
+        while !done { // loop until a success start position
         //asking for input
             println!("Which row do you want your {name} of size {len} to start?" ,name = tuple_len_name.1,len = tuple_len_name.0);
             let input : String = Input::new()
@@ -152,7 +152,7 @@ impl Battleship {
                 _ => {  println!("Bad args");
                 continue; }
             };
-            if (self.your_board[row_start][col_start].empty == true ) {
+            if self.your_board[row_start][col_start].empty == true {
                 start_pos.0 = row_start;
                 start_pos.1 = col_start;
             } else {
@@ -165,36 +165,36 @@ impl Battleship {
             let row_start = start_pos.0;
             let col_start = start_pos.1;
             // Handle up first
-            if (start_pos.0 >= len - 1) {
+            if start_pos.0 >= len - 1 {
                 for i in 0..len-1 {
-                    if (self.your_board[row_start - i][col_start].empty == false) {
+                    if self.your_board[row_start - i][col_start].empty == false {
                         continue;
                     }
                 }
                 all_possible_end.push((row_start - len + 1,col_start));
             }
             // Handle down
-            if (row_start + len <= kSize  - 1) {
+            if row_start + len <= kSize  - 1 {
                 for i in 0..len-1 {
-                    if (self.your_board[row_start + i][col_start].empty == false) {
+                    if self.your_board[row_start + i][col_start].empty == false {
                         continue;
                     }
                 }
                 all_possible_end.push((row_start + len ,col_start));
             }
             // Handle left 
-            if (col_start >= len - 1) {
+            if col_start >= len - 1 {
                 for i in 0..len-1 {
-                    if (self.your_board[row_start][col_start - i].empty == false) {
+                    if self.your_board[row_start][col_start - i].empty == false {
                         continue;
                     }
                 }
                 all_possible_end.push((row_start,col_start-len+1));
             }
             // Handle right
-            if (col_start + len <= kSize  - 1) {
+            if col_start + len <= kSize  - 1 {
                 for i in 0..len-1 {
-                    if (self.your_board[row_start ][col_start+i].empty == false) {
+                    if self.your_board[row_start ][col_start+i].empty == false {
                         continue;
                     }
                 }
@@ -233,8 +233,8 @@ impl Battleship {
             } 
             /// Finished getting start_pos and end_pos
         }
-        if (start_pos.0 == end_pos.0) {
-            if (start_pos.1 < end_pos.1) {
+        if start_pos.0 == end_pos.0 {
+            if start_pos.1 < end_pos.1 {
                 for i in start_pos.1..end_pos.1 {
                     self.your_board[start_pos.0][i].empty = false;
                 }
@@ -244,7 +244,7 @@ impl Battleship {
                 }
             }
         } else {
-            if (start_pos.0 < end_pos.0) {
+            if start_pos.0 < end_pos.0 {
                 for i in start_pos.0..end_pos.0 {
                     self.your_board[i][start_pos.1].empty = false;
                 }
@@ -259,7 +259,7 @@ impl Battleship {
     pub fn Player_Place(&self) {
         for row in 0..kSize-1 {
             for col in 0..kSize-1 {
-                if (self.your_board[row][col].empty == false || self.your_board[row][col].guess == true) {
+                if self.your_board[row][col].empty == false || self.your_board[row][col].guess == true {
                     panic!("Place in a already worked on board");
                 }
             }
