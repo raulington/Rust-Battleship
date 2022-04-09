@@ -33,7 +33,7 @@ impl std::fmt::Display for BattleshipErrorKind {
 }
 
 /// BattleshipError impl block
-impl BattlshipError {
+impl BattleshipError {
     /// Instantiates a new BattleshipError object with the given error_type attached
     /// to the given user_input.
     pub fn new(error_type: BattleshipErrorKind, user_input: String) -> BattleshipError {

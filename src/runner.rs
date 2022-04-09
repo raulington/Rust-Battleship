@@ -1,5 +1,5 @@
 use dialoguer::Input;
-use crate::battleship::game;
+use crate::Battleship::game;
 
 
 /// Runs a Battleship game on the command line.
