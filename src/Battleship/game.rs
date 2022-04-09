@@ -13,7 +13,7 @@ pub const kNo2: usize = 1; // Number of Submarine
 
 #[derive(Debug)]
 pub struct ShipPiecesError {
-    pub error_type : HangmanErrorKind,
+    pub error_type : BattleshipErrorKind,
     pub error_msg : String,
     pub user_input: String
 }
@@ -61,7 +61,7 @@ impl Battleship {
 
     // Returns X is guess is true and empty is false, O is guess is false
     pub fn drawyourboard(i: i32) -> char {
-        Node n = your_board.get(i);
+        let n = your_board.get(i);
         if (n.guess == true && empty == false) {
             return 'X';
         }
@@ -69,7 +69,7 @@ impl Battleship {
     } 
 
     pub fn drawenemyboard(i: i32) -> char {
-        Node n = enemy_board.get(i);
+        let n = enemy_board.get(i);
         if (n.guess == true && empty == false) {
             return 'X';
         }
