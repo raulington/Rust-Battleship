@@ -1,5 +1,6 @@
 use dialoguer::Input;
-use crate::Battleship::game;
+use crate::Battleship::game::*;
+use crate::Battleship::error::*;
 
 
 /// Runs a Battleship game on the command line.
@@ -27,7 +28,7 @@ impl BattleshipRunner {
                 }
             },
             _ => {
-                println!("{}", BattleshipError::new(BattleshipErrorKind::GameNotStarted, c.to_string()))
+                println!("{}", BattleshipError::new(BattleshipErrorKind::GameNotStarted, p.to_string()))
             }
         };
     }
@@ -37,7 +38,6 @@ impl BattleshipRunner {
         self.game = match Battleship::new() {
             Ok(b) => {
                 println!("Starting battleship game!\n");
-                b.Player_Place();
                 Some(b)
             },
             Err(e) => {
@@ -45,6 +45,7 @@ impl BattleshipRunner {
                 None
             }
         };
+        self.game.as_mut().unwrap().Player_Place();
     }
 
     /// Displays the game status including the board status, incorrect guesses,
@@ -82,8 +83,8 @@ impl BattleshipRunner {
                 ak = g.drawenemyboard(2, 0), bk = g.drawenemyboard(2, 1), ck = g.drawenemyboard(2, 2), dk = g.drawenemyboard(2, 3),
                 ek = g.drawenemyboard(2, 4), fk = g.drawenemyboard(2, 5), gk = g.drawenemyboard(2, 6), hk = g.drawenemyboard(2, 7),
                 ik = g.drawenemyboard(2, 8), jk = g.drawenemyboard(2, 9),
-                al = g.drawenemyboard(3, 0), bl = g.drawenemyboard(3, 1), cl = g.drawenemyboard(2), dl = g.drawenemyboard(3, 3),
-                el = g.drawenemyboard(3, 4), fl = g.drawenemyboard(3, 5), gl = g.drawenemyboard(6), hl = g.drawenemyboard(3, 7),
+                al = g.drawenemyboard(3, 0), bl = g.drawenemyboard(3, 1), cl = g.drawenemyboard(3, 2), dl = g.drawenemyboard(3, 3),
+                el = g.drawenemyboard(3, 4), fl = g.drawenemyboard(3, 5), gl = g.drawenemyboard(3, 6), hl = g.drawenemyboard(3, 7),
                 il = g.drawenemyboard(3, 8), jl = g.drawenemyboard(3, 9),
                 am = g.drawenemyboard(4, 0), bm = g.drawenemyboard(4, 1), cm = g.drawenemyboard(4, 2), dm = g.drawenemyboard(4, 3),
                 em = g.drawenemyboard(4, 4), fm = g.drawenemyboard(4, 5), gm = g.drawenemyboard(4, 6), hm = g.drawenemyboard(4, 7),
@@ -132,8 +133,8 @@ impl BattleshipRunner {
                 ak = g.drawyourboard(2, 0), bk = g.drawyourboard(2, 1), ck = g.drawyourboard(2, 2), dk = g.drawyourboard(2, 3),
                 ek = g.drawyourboard(2, 4), fk = g.drawyourboard(2, 5), gk = g.drawyourboard(2, 6), hk = g.drawyourboard(2, 7),
                 ik = g.drawyourboard(2, 8), jk = g.drawyourboard(2, 9),
-                al = g.drawyourboard(3, 0), bl = g.drawyourboard(3, 1), cl = g.drawyourboard(2), dl = g.drawyourboard(3, 3),
-                el = g.drawyourboard(3, 4), fl = g.drawyourboard(3, 5), gl = g.drawyourboard(6), hl = g.drawyourboard(3, 7),
+                al = g.drawyourboard(3, 0), bl = g.drawyourboard(3, 1), cl = g.drawyourboard(3, 2), dl = g.drawyourboard(3, 3),
+                el = g.drawyourboard(3, 4), fl = g.drawyourboard(3, 5), gl = g.drawyourboard(3, 6), hl = g.drawyourboard(3, 7),
                 il = g.drawyourboard(3, 8), jl = g.drawyourboard(3, 9),
                 am = g.drawyourboard(4, 0), bm = g.drawyourboard(4, 1), cm = g.drawyourboard(4, 2), dm = g.drawyourboard(4, 3),
                 em = g.drawyourboard(4, 4), fm = g.drawyourboard(4, 5), gm = g.drawyourboard(4, 6), hm = g.drawyourboard(4, 7),
@@ -158,12 +159,12 @@ impl BattleshipRunner {
             },
             _ => {}
         }
+    }
 
-        fn display_help(&self) {
-            println!("!new: starts a new game.\n!attack [i32]: \
-                guesses the position of an enemy battleship in the current game.\n!status: \
-                outputs the current game status.\n!help: displays this help message.\n!exit: exits the game.\n")
-        }
+    fn display_help(&self) {
+        println!("!new: starts a new game.\n!attack [i32]: \
+            guesses the position of an enemy battleship in the current game.\n!status: \
+            outputs the current game status.\n!help: displays this help message.\n!exit: exits the game.\n")
     }
 
     /// Runs a game of Battleship on the command line

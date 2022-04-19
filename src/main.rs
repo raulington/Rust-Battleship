@@ -10,10 +10,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     or use !help for usage instructions.\n");
     // read command line args
     let cmd = opt::BattleshipOpt::from_args();
-    cmd.verbose = true;
     // start the hangman runner
     let mut battleship_runner = runner::BattleshipRunner::new(cmd.verbose);
     // run the game
-    battleship_runner_runner.run()?;
+    battleship_runner.run()?;
     Ok(())
 }

@@ -1,4 +1,5 @@
 use dialoguer::Input;
+use super::error::*;
 
 #[derive(Debug, Default)]
 pub struct Battleship {
@@ -20,6 +21,14 @@ pub struct ShipPiecesError {
     pub user_input: String
 }
 
+/// Display implementation for BattleshipError for user output in the CLI.
+impl std::fmt::Display for ShipPiecesError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        writeln!(f, "{} --- (user_input : {})\n{}",
+            self.error_type, self.user_input, self.error_msg)
+    } 
+}
+
 #[derive(Debug, PartialEq)]
 pub enum ShipPieces {
     Carrier, // size 5
@@ -39,22 +48,22 @@ impl Battleship {
         let mut your_board = vec![Vec::new(); kSize];
         let mut enemy_board = vec![Vec::new(); kSize];
         // Can spawn thread to do this faster if needed
-        for vec in your_board {
-            for i in 0..10 {            
-                let mut n = Node {
+        for vec in your_board.iter_mut() {
+            for _i in 0..10 {            
+                let n = Node {
                     guess: false,
                     empty : true,
                 };
-                vec.push(n.clone());
+                vec.push(n);
             }
         }
-        for vec in enemy_board {
-            for i in 0..10 {            
-                let mut n = Node {
+        for vec in enemy_board.iter_mut() {
+            for _i in 0..10 {            
+                let n = Node {
                     guess: false,
                     empty : true,
                 };
-                vec.push(n.clone());
+                vec.push(n);
             }
         }
         let battleship = Battleship{
@@ -66,7 +75,7 @@ impl Battleship {
     // Returns X is guess is true and empty is false, O is guess is false
     pub fn drawyourboard(&self, i: usize, j: usize) -> char {
         let n = self.your_board.get(i).unwrap().get(j).unwrap();
-        if (n.guess == true && n.empty == false) {
+        if n.guess == true && n.empty == false {
             return 'X';
         }
         return 'O';
@@ -74,7 +83,7 @@ impl Battleship {
 
     pub fn drawenemyboard(&self, i: usize, j: usize) -> char {
         let n = self.enemy_board.get(i).unwrap().get(j).unwrap();
-        if (n.guess == true && n.empty == false) {
+        if n.guess == true && n.empty == false {
             return 'X';
         }
         return 'O';
@@ -83,6 +92,9 @@ impl Battleship {
     // Attack Function - Joseph
     //  1. Guessing right prints "Hit" and Node at your enemy's board will be updated
     // 2. Guessing wrong prints "Miss" and Node at your enemy's board will be updated
+    pub fn attack(&mut self, p : i32) -> Result<bool, BattleshipErrorKind> {
+        return Ok(true);
+    }
 
     // Place Function (battleship piece generic (ex: ShipPieces::Carrier)
     //    1. Make it so that you are forced to keep placing until you have used all of your pieces
@@ -237,22 +249,22 @@ impl Battleship {
         }
         if start_pos.0 == end_pos.0 {
             if start_pos.1 < end_pos.1 {
-                for i in start_pos.1..end_pos.1 {
-                    self.your_board[start_pos.0][i].empty = false;
+                for _i in start_pos.1..end_pos.1 {
+                    self.your_board[start_pos.0][_i].empty = false;
                 }
             } else {
-                for i in end_pos.1..start_pos.1 {
-                    self.your_board[start_pos.0][i].empty = false;
+                for _i in end_pos.1..start_pos.1 {
+                    self.your_board[start_pos.0][_i].empty = false;
                 }
             }
         } else {
             if start_pos.0 < end_pos.0 {
-                for i in start_pos.0..end_pos.0 {
-                    self.your_board[i][start_pos.1].empty = false;
+                for _i in start_pos.0..end_pos.0 {
+                    self.your_board[_i][start_pos.1].empty = false;
                 }
             } else {
-                for i in end_pos.0..start_pos.0 {
-                    self.your_board[i][start_pos.1].empty = false;
+                for _i in end_pos.0..start_pos.0 {
+                    self.your_board[_i][start_pos.1].empty = false;
                 }
             }
         }
@@ -266,16 +278,16 @@ impl Battleship {
                 }
             }
         }
-        for i in 0..kNo5 - 1 {
+        for _i in 0..kNo5 - 1 {
             Battleship::Player_Place_1_ship(self,ShipPieces::Carrier);
         }
-        for i in 0..kNo4 -1 {
+        for _i in 0..kNo4 -1 {
             Battleship::Player_Place_1_ship(self,ShipPieces::Battleship);
         }
-        for i in 0..kNo3-1 {
+        for _i in 0..kNo3-1 {
             Battleship::Player_Place_1_ship(self,ShipPieces::Cruise);
         }
-        for i in 0..kNo2-1 {
+        for _i in 0..kNo2-1 {
             Battleship::Player_Place_1_ship(self,ShipPieces::Submarine);
         }
        print!("All ships being placed, ready to game!")
