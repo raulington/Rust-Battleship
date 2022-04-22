@@ -75,7 +75,8 @@ impl Battleship {
     // Returns X is guess is true and empty is false, O is guess is false
     pub fn drawyourboard(&self, i: usize, j: usize) -> char {
         let n = self.your_board.get(i).unwrap().get(j).unwrap();
-        if n.guess == true && n.empty == false {
+        // if n.guess == true && n.empty == false {
+        if n.empty == false{
             return 'X';
         }
         return 'O';
@@ -102,12 +103,14 @@ impl Battleship {
     //    3. Once one piece has been placed, the terminal will print what pieces are left to be made
     // Player Place function, arguments: ship_type
     pub fn Player_Place_1_ship(&mut self,ship_type : ShipPieces) ->() {
+
         let tuple_len_name : (usize,String) = match  ship_type {
             ShipPieces::Carrier => (5, "Carrier".to_string()),
             ShipPieces::Battleship => (4,"Battleship".to_string()),
             ShipPieces::Cruise =>(3,"Cruise".to_string()),
             ShipPieces::Submarine => (2,"Submarine".to_string()),
         };
+        println!("{a} {b}", a= "Player place for ",b = tuple_len_name.1);
         let mut start_pos: (usize, usize) = (0,0);
         let mut end_pos :(usize,usize) = (0,0);
         let mut done: bool = false;
@@ -127,15 +130,16 @@ impl Battleship {
                 continue;
             }
             let row_start = match args[0] {
-                "1" => 0,
-                "2" => 1,
-                "3" => 2,
-                "4" => 3,
-                "5" => 4,
-                "6" => 5,
-                "7" => 6,
-                "8" => 7,
-                "9" => 8,
+                "0" => 0,
+                "1" => 1,
+                "2" => 2,
+                "3" => 3,
+                "4" => 4,
+                "5" => 5,
+                "6" => 6,
+                "7" => 7,
+                "8" => 8,
+                "9" => 9,
                 _ => {  println!("Bad args");
                         continue; }
             };
@@ -154,15 +158,16 @@ impl Battleship {
                 continue;
             }
             let col_start = match args[0] {
-                "1" => 0,
-                "2" => 1,
-                "3" => 2,
-                "4" => 3,
-                "5" => 4,
-                "6" => 5,
-                "7" => 6,
-                "8" => 7,
-                "9" => 8,
+                "0" => 0,
+                "1" => 1,
+                "2" => 2,
+                "3" => 3,
+                "4" => 4,
+                "5" => 5,
+                "6" => 6,
+                "7" => 7,
+                "8" => 8,
+                "9" => 9,
                 _ => {  println!("Bad args");
                 continue; }
             };
@@ -180,45 +185,60 @@ impl Battleship {
             let col_start = start_pos.1;
             // Handle up first
             if start_pos.0 >= len - 1 {
+                let mut a = true;
                 for i in 0..len-1 {
                     if self.your_board[row_start - i][col_start].empty == false {
-                        continue;
+                        a = false;
                     }
                 }
-                all_possible_end.push((row_start - len + 1,col_start));
+                if a {
+                    all_possible_end.push((row_start +1 - len ,col_start));
+                }
+
             }
             // Handle down
-            if row_start + len <= kSize  - 1 {
+            if row_start + len <= kSize  {
+                let mut a:  bool = true;
                 for i in 0..len-1 {
                     if self.your_board[row_start + i][col_start].empty == false {
-                        continue;
+                        a = false;
                     }
                 }
-                all_possible_end.push((row_start + len ,col_start));
+                if a {
+                    all_possible_end.push((row_start + len-1 ,col_start));
+                }
             }
             // Handle left 
             if col_start >= len - 1 {
+                let mut a = true;
                 for i in 0..len-1 {
                     if self.your_board[row_start][col_start - i].empty == false {
-                        continue;
+                        a = false;
                     }
                 }
-                all_possible_end.push((row_start,col_start-len+1));
+                if a {
+                    all_possible_end.push((row_start,col_start+1 - len));
+                }
+
             }
             // Handle right
-            if col_start + len <= kSize  - 1 {
+            if col_start + len <= kSize   {
+                let mut a = true;
                 for i in 0..len-1 {
                     if self.your_board[row_start ][col_start+i].empty == false {
-                        continue;
+                        a = false;
                     }
                 }
-                all_possible_end.push((row_start , len+ col_start));
+                if a {
+                    all_possible_end.push((row_start , len+ col_start-1));
+                }
+                
             }
             for i in 0..all_possible_end.len() {
                 println!("{no} - ({row},{col})", 
                     no = i + 1,
-                    row = all_possible_end[i].0,
-                    col = all_possible_end[i].1,)
+                    row = all_possible_end[i].0 ,
+                    col = all_possible_end[i].1 ,)
             }
             while !done { // loop until get endpoint
                 //asking for input
@@ -249,47 +269,50 @@ impl Battleship {
         }
         if start_pos.0 == end_pos.0 {
             if start_pos.1 < end_pos.1 {
-                for _i in start_pos.1..end_pos.1 {
+                for _i in start_pos.1..end_pos.1+1 {
                     self.your_board[start_pos.0][_i].empty = false;
                 }
             } else {
-                for _i in end_pos.1..start_pos.1 {
+                for _i in end_pos.1..start_pos.1+1 {
                     self.your_board[start_pos.0][_i].empty = false;
                 }
             }
         } else {
             if start_pos.0 < end_pos.0 {
-                for _i in start_pos.0..end_pos.0 {
+                for _i in start_pos.0..end_pos.0+1 {
                     self.your_board[_i][start_pos.1].empty = false;
                 }
             } else {
-                for _i in end_pos.0..start_pos.0 {
+                for _i in end_pos.0..start_pos.0+1 {
                     self.your_board[_i][start_pos.1].empty = false;
                 }
             }
         }
+        println!("Finished Placing");
+
         // Finished placing
     } 
     pub fn Player_Place(&mut self) {
-        for row in 0..kSize-1 {
-            for col in 0..kSize-1 {
-                if self.your_board[row][col].empty == false || self.your_board[row][col].guess == true {
-                    panic!("Place in a already worked on board");
-                }
-            }
-        }
-        for _i in 0..kNo5 - 1 {
+        println!("Player Place being called");
+        // for row in 0..kSize-1 {
+        //     for col in 0..kSize-1 {
+        //         if self.your_board[row][col].empty == false || self.your_board[row][col].guess == true {
+        //             panic!("Place in a already worked on board");
+        //         }
+        //     }
+        // }
+        for _i in 0..kNo5 {
             Battleship::Player_Place_1_ship(self,ShipPieces::Carrier);
         }
-        for _i in 0..kNo4 -1 {
+        for _i in 0..kNo4{
             Battleship::Player_Place_1_ship(self,ShipPieces::Battleship);
         }
-        for _i in 0..kNo3-1 {
+        for _i in 0..kNo3{
             Battleship::Player_Place_1_ship(self,ShipPieces::Cruise);
         }
-        for _i in 0..kNo2-1 {
+        for _i in 0..kNo2{
             Battleship::Player_Place_1_ship(self,ShipPieces::Submarine);
         }
-       print!("All ships being placed, ready to game!")
+        print!("All ships being placed, ready to game!")
     }  
 }
