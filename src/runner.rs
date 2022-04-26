@@ -45,7 +45,8 @@ impl BattleshipRunner {
                 None
             }
         };
-        self.game.as_mut().unwrap().Player_Place();
+        self.game.as_mut().unwrap().cpu_place();
+        self.game.as_mut().unwrap().player_place();
     }
 
     /// Displays the game status including the board status, incorrect guesses,
