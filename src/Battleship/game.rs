@@ -1,5 +1,6 @@
 use dialoguer::Input;
 use super::error::*;
+use rand::Rng;
 
 #[derive(Debug, Default)]
 pub struct Battleship {
@@ -7,11 +8,11 @@ pub struct Battleship {
     pub your_board: Vec<Vec<Node>>,
     pub enemy_board: Vec<Vec<Node>>,
 }
-pub const kSize: usize = 10;
-pub const kNo5 : usize= 1; // Number of Carrier
-pub const kNo4: usize = 1; // Number of Battleship
-pub const kNo3: usize = 1; // Number of Cruise
-pub const kNo2: usize = 1; // Number of Submarine
+pub const K_SIZE: usize = 10;
+pub const K_NO5 : usize= 1; // Number of Carrier
+pub const K_NO4: usize = 1; // Number of Battleship
+pub const K_NO3: usize = 1; // Number of Cruise
+pub const K_NO2: usize = 1; // Number of Submarine
 
 
 #[derive(Debug)]
@@ -45,8 +46,8 @@ pub struct Node {
 
 impl Battleship {
     pub fn new() -> Result<Self, ShipPiecesError> {
-        let mut your_board = vec![Vec::new(); kSize];
-        let mut enemy_board = vec![Vec::new(); kSize];
+        let mut your_board = vec![Vec::new(); K_SIZE];
+        let mut enemy_board = vec![Vec::new(); K_SIZE];
         // Can spawn thread to do this faster if needed
         for vec in your_board.iter_mut() {
             for _i in 0..10 {            
@@ -75,11 +76,11 @@ impl Battleship {
     // Returns X is guess is true and empty is false, O is guess is false
     pub fn drawyourboard(&self, i: usize, j: usize) -> char {
         let n = self.your_board.get(i).unwrap().get(j).unwrap();
-        // if n.guess == true && n.empty == false {
-        if n.empty == false{
+        if n.guess == true && n.empty == false {
             return 'X';
         }
         return 'O';
+        // Usign color to make it looks better
     } 
 
     pub fn drawenemyboard(&self, i: usize, j: usize) -> char {
@@ -102,7 +103,7 @@ impl Battleship {
     //    2. Make it so that you can't attack until you have placed all of your pieces
     //    3. Once one piece has been placed, the terminal will print what pieces are left to be made
     // Player Place function, arguments: ship_type
-    pub fn Player_Place_1_ship(&mut self,ship_type : ShipPieces) ->() {
+    pub fn player_place_1_ship(&mut self,ship_type : ShipPieces) ->() {
 
         let tuple_len_name : (usize,String) = match  ship_type {
             ShipPieces::Carrier => (5, "Carrier".to_string()),
@@ -186,7 +187,7 @@ impl Battleship {
             // Handle up first
             if start_pos.0 >= len - 1 {
                 let mut a = true;
-                for i in 0..len-1 {
+                for i in 0..=len-1 {
                     if self.your_board[row_start - i][col_start].empty == false {
                         a = false;
                     }
@@ -197,9 +198,9 @@ impl Battleship {
 
             }
             // Handle down
-            if row_start + len <= kSize  {
+            if row_start + len <= K_SIZE  {
                 let mut a:  bool = true;
-                for i in 0..len-1 {
+                for i in 0..=len-1 {
                     if self.your_board[row_start + i][col_start].empty == false {
                         a = false;
                     }
@@ -211,7 +212,7 @@ impl Battleship {
             // Handle left 
             if col_start >= len - 1 {
                 let mut a = true;
-                for i in 0..len-1 {
+                for i in 0..=len-1 {
                     if self.your_board[row_start][col_start - i].empty == false {
                         a = false;
                     }
@@ -219,12 +220,11 @@ impl Battleship {
                 if a {
                     all_possible_end.push((row_start,col_start+1 - len));
                 }
-
             }
             // Handle right
-            if col_start + len <= kSize   {
+            if col_start + len <= K_SIZE   {
                 let mut a = true;
-                for i in 0..len-1 {
+                for i in 0..=len-1 {
                     if self.your_board[row_start ][col_start+i].empty == false {
                         a = false;
                     }
@@ -292,27 +292,133 @@ impl Battleship {
 
         // Finished placing
     } 
-    pub fn Player_Place(&mut self) {
-        println!("Player Place being called");
-        // for row in 0..kSize-1 {
-        //     for col in 0..kSize-1 {
-        //         if self.your_board[row][col].empty == false || self.your_board[row][col].guess == true {
-        //             panic!("Place in a already worked on board");
-        //         }
-        //     }
-        // }
-        for _i in 0..kNo5 {
-            Battleship::Player_Place_1_ship(self,ShipPieces::Carrier);
+    pub fn player_place(&mut self) {
+        for row in 0..=K_SIZE-1 {
+            for col in 0..=K_SIZE-1 {
+                if self.your_board[row][col].empty == false || self.your_board[row][col].guess == true {
+                    panic!("Place in an already worked on board");
+                }
+            }
         }
-        for _i in 0..kNo4{
-            Battleship::Player_Place_1_ship(self,ShipPieces::Battleship);
+        for _i in 0..K_NO5 {
+            Battleship::player_place_1_ship(self,ShipPieces::Carrier);
         }
-        for _i in 0..kNo3{
-            Battleship::Player_Place_1_ship(self,ShipPieces::Cruise);
+        for _i in 0..K_NO4{
+            Battleship::player_place_1_ship(self,ShipPieces::Battleship);
         }
-        for _i in 0..kNo2{
-            Battleship::Player_Place_1_ship(self,ShipPieces::Submarine);
+        for _i in 0..K_NO3{
+            Battleship::player_place_1_ship(self,ShipPieces::Cruise);
         }
-        print!("All ships being placed, ready to game!")
+        for _i in 0..K_NO2{
+            Battleship::player_place_1_ship(self,ShipPieces::Submarine);
+        }
+        println!("All Player ships being placed, ready to game!")
     }  
+    pub fn cpu_place(&mut self) {
+        for row in 0..=K_SIZE-1 {
+            for col in 0..=K_SIZE-1 {
+                if self.enemy_board[row][col].empty == false || self.enemy_board[row][col].guess == true {
+                    panic!("Place in an already worked on board");
+                }
+            }
+        }
+        for _i in 0..K_NO5 {
+            Battleship::cpu_place_1_ship(self,ShipPieces::Carrier);
+        }
+        for _i in 0..K_NO4{
+            Battleship::cpu_place_1_ship(self,ShipPieces::Battleship);
+        }
+        for _i in 0..K_NO3{
+            Battleship::cpu_place_1_ship(self,ShipPieces::Cruise);
+        }
+        for _i in 0..K_NO2{
+            Battleship::cpu_place_1_ship(self,ShipPieces::Submarine);
+        }
+        println!("All CPU ships being placed, ready to game!");
+    }   
+
+
+    pub fn cpu_place_1_ship(&mut self,ship_type : ShipPieces) ->() {
+        let tuple_len_name : (usize,String) = match  ship_type {
+            ShipPieces::Carrier => (5, "Carrier".to_string()),
+            ShipPieces::Battleship => (4,"Battleship".to_string()),
+            ShipPieces::Cruise =>(3,"Cruise".to_string()),
+            ShipPieces::Submarine => (2,"Submarine".to_string()),
+        };
+        let len = tuple_len_name.0;
+        let mut rng = rand::thread_rng();
+        let mut finished: bool = false;
+        while !finished {
+            let row_start:usize = rng.gen_range(0..10);
+            let col_start:usize = rng.gen_range(0..10);
+            if self.enemy_board[row_start][col_start].empty == true {
+                let direction = rng.gen_range(0..4);// 0 - up, 1 - down, 2- left, 3- right
+                if direction == 0 {
+                    if row_start >= len - 1 {
+                        let mut a = true;
+                        for i in 0..=len-1 {
+                            if self.enemy_board[row_start - i][col_start].empty == false {
+                                a = false;
+                            }
+                        }
+                        if a {
+                            for i in 0..=len-1 {
+                                self.enemy_board[row_start -i][col_start].empty = false;
+                            }
+                            finished = true;
+                        }
+                    }
+                }
+                if direction == 1 {
+                    if row_start + len <= K_SIZE  {
+                        let mut a:  bool = true;
+                        for i in 0..=len-1 {
+                            if self.enemy_board[row_start + i][col_start].empty == false {
+                                a = false;
+                            }
+                        }
+                        if a {
+                            for i in 0..=len-1 {
+                                self.enemy_board[row_start + i][col_start].empty = false;
+                            }
+                            finished = true;
+                        }
+                    }
+                }
+                if direction == 2 {
+                    if col_start >= len - 1 {
+                        let mut a = true;
+                        for i in 0..=len-1 {
+                            if self.enemy_board[row_start][col_start - i].empty == false {
+                                a = false;
+                            }
+                        }
+                        if a {
+                            for i in 0..=len-1 {
+                                self.enemy_board[row_start][col_start - i].empty = false;
+                            }
+                            finished = true;
+                        }
+                    }
+                }
+                if direction == 3 {
+                    if col_start + len <= K_SIZE   {
+                        let mut a = true;
+                        for i in 0..=len-1 {
+                            if self.enemy_board[row_start ][col_start+i].empty == false {
+                                a = false;
+                            }
+                        }
+                        if a {
+                            for i in 0..=len-1 {
+                                self.enemy_board[row_start ][col_start+i].empty = false;
+                            }
+                            finished = true;
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
 }
