@@ -11,8 +11,8 @@ pub struct Battleship {
 pub const K_SIZE: usize = 10;
 pub const K_NO5 : usize= 1; // Number of Carrier
 pub const K_NO4: usize = 1; // Number of Battleship
-pub const K_NO3: usize = 1; // Number of Cruise
-pub const K_NO2: usize = 1; // Number of Submarine
+pub const K_NO3: usize = 2; // Number of Cruise
+pub const K_NO2: usize = 1; // Number of Destroyer
 
 
 #[derive(Debug)]
@@ -35,7 +35,7 @@ pub enum ShipPieces {
     Carrier, // size 5
     Battleship, // size 4
     Cruise, // size 3
-    Submarine // size 2
+    Destroyer // size 2
 }
 
 #[derive(Debug,Clone,Copy)]
@@ -109,7 +109,7 @@ impl Battleship {
             ShipPieces::Carrier => (5, "Carrier".to_string()),
             ShipPieces::Battleship => (4,"Battleship".to_string()),
             ShipPieces::Cruise =>(3,"Cruise".to_string()),
-            ShipPieces::Submarine => (2,"Submarine".to_string()),
+            ShipPieces::Destroyer => (2,"Destroyer".to_string()),
         };
         println!("{a} {b}", a= "Player place for ",b = tuple_len_name.1);
         let mut start_pos: (usize, usize) = (0,0);
@@ -310,7 +310,7 @@ impl Battleship {
             Battleship::player_place_1_ship(self,ShipPieces::Cruise);
         }
         for _i in 0..K_NO2{
-            Battleship::player_place_1_ship(self,ShipPieces::Submarine);
+            Battleship::player_place_1_ship(self,ShipPieces::Destroyer);
         }
         println!("All Player ships being placed, ready to game!")
     }  
@@ -332,7 +332,7 @@ impl Battleship {
             Battleship::cpu_place_1_ship(self,ShipPieces::Cruise);
         }
         for _i in 0..K_NO2{
-            Battleship::cpu_place_1_ship(self,ShipPieces::Submarine);
+            Battleship::cpu_place_1_ship(self,ShipPieces::Destroyer);
         }
         println!("All CPU ships being placed, ready to game!");
     }   
@@ -343,7 +343,7 @@ impl Battleship {
             ShipPieces::Carrier => (5, "Carrier".to_string()),
             ShipPieces::Battleship => (4,"Battleship".to_string()),
             ShipPieces::Cruise =>(3,"Cruise".to_string()),
-            ShipPieces::Submarine => (2,"Submarine".to_string()),
+            ShipPieces::Destroyer => (2,"Destroyer".to_string()),
         };
         let len = tuple_len_name.0;
         let mut rng = rand::thread_rng();
