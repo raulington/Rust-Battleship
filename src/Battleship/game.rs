@@ -441,7 +441,7 @@ impl Battleship {
                 }
             }
         }
-        if e_count == 17 {
+        if e_count == 5 * K_NO5 + 4 * K_NO4 + 3 * K_NO3 + 2 * K_NO2 {
             return Some(true);
         }
         return None;
