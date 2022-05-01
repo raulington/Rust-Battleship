@@ -56,25 +56,16 @@ impl BattleshipRunner {
             Some(g) => {
                 let mut status : String = String::new();
                 status = format!("{a}{b}{c}", a = format!("Enemy Board: \n
-                | {ai} | {bi} | {ci} | {di} | {ei} | {fi} | {gi} | {hi} | {ii} | {ji} |\n
-                |---------------------------------------------------------------------|\n
-                | {aj} | {bj} | {cj} | {dj} | {ej} | {fj} | {gj} | {hj} | {ij} | {jj} |\n
-                |---------------------------------------------------------------------|\n
-                | {ak} | {bk} | {ck} | {dk} | {ek} | {fk} | {gk} | {hk} | {ik} | {jk} |\n
-                |---------------------------------------------------------------------|\n
-                | {al} | {bl} | {cl} | {dl} | {el} | {fl} | {gl} | {hl} | {il} | {jl} |\n
-                |---------------------------------------------------------------------|\n
-                | {am} | {bm} | {cm} | {dm} | {em} | {fm} | {gm} | {hm} | {im} | {jm} |\n
-                |---------------------------------------------------------------------|\n
-                | {an} | {bn} | {cn} | {dn} | {en} | {ffn} | {gn} | {hn} | {iin} | {jn} |\n
-                |---------------------------------------------------------------------|\n
-                | {ao} | {bo} | {co} | {doo} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n
-                |---------------------------------------------------------------------|\n
-                | {ap} | {bp} | {cp} | {dp} | {ep} | {fp} | {gp} | {hp} | {ip} | {jp} |\n
-                |---------------------------------------------------------------------|\n
-                | {aq} | {bq} | {cq} | {dq} | {eq} | {fq} | {gq} | {hq} | {iq} | {jq} |\n
-                |---------------------------------------------------------------------|\n
-                | {ar} | {br} | {cr} | {dr} | {er} | {fr} | {gr} | {hr} | {ir} | {jr} |\n",
+                {ai} {bi} {ci} {di} {ei} {fi} {gi} {hi} {ii} {ji}\n
+                {aj} {bj} {cj} {dj} {ej} {fj} {gj} {hj} {ij} {jj}\n
+                {ak} {bk} {ck} {dk} {ek} {fk} {gk} {hk} {ik} {jk}\n
+                {al} {bl} {cl} {dl} {el} {fl} {gl} {hl} {il} {jl}\n
+                {am} {bm} {cm} {dm} {em} {fm} {gm} {hm} {im} {jm}\n
+                {an} {bn} {cn} {dn} {en} {ffn} {gn} {hn} {iin} {jn}\n
+                {ao} {bo} {co} {doo} {eo} {fo} {go} {ho} {io} {jo}\n
+                {ap} {bp} {cp} {dp} {ep} {fp} {gp} {hp} {ip} {jp}\n
+                {aq} {bq} {cq} {dq} {eq} {fq} {gq} {hq} {iq} {jq}\n
+                {ar} {br} {cr} {dr} {er} {fr} {gr} {hr} {ir} {jr}\n",
                 ai = g.drawenemyboard(0, 0), bi = g.drawenemyboard(0, 1), ci = g.drawenemyboard(0, 2), di = g.drawenemyboard(0, 3),
                 ei = g.drawenemyboard(0, 4), fi = g.drawenemyboard(0, 5), gi = g.drawenemyboard(0, 6), hi = g.drawenemyboard(0, 7),
                 ii = g.drawenemyboard(0, 8), ji = g.drawenemyboard(0, 9),
@@ -106,25 +97,16 @@ impl BattleshipRunner {
                 er = g.drawenemyboard(9, 4), fr = g.drawenemyboard(9, 5), gr = g.drawenemyboard(9, 6), hr = g.drawenemyboard(9, 7),
                 ir = g.drawenemyboard(9, 8), jr = g.drawenemyboard(9, 9)
                 ), b = "\n", c = format!("Your Board: \n
-                | {ai} | {bi} | {ci} | {di} | {ei} | {fi} | {gi} | {hi} | {ii} | {ji} |\n
-                |---------------------------------------------------------------------|\n
-                | {aj} | {bj} | {cj} | {dj} | {ej} | {fj} | {gj} | {hj} | {ij} | {jj} |\n
-                |---------------------------------------------------------------------|\n
-                | {ak} | {bk} | {ck} | {dk} | {ek} | {fk} | {gk} | {hk} | {ik} | {jk} |\n
-                |---------------------------------------------------------------------|\n
-                | {al} | {bl} | {cl} | {dl} | {el} | {fl} | {gl} | {hl} | {il} | {jl} |\n
-                |---------------------------------------------------------------------|\n
-                | {am} | {bm} | {cm} | {dm} | {em} | {fm} | {gm} | {hm} | {im} | {jm} |\n
-                |---------------------------------------------------------------------|\n
-                | {an} | {bn} | {cn} | {dn} | {en} | {ffn} | {gn} | {hn} | {iin} | {jn} |\n
-                |---------------------------------------------------------------------|\n
-                | {ao} | {bo} | {co} | {doo} | {eo} | {fo} | {go} | {ho} | {io} | {jo} |\n
-                |---------------------------------------------------------------------|\n
-                | {ap} | {bp} | {cp} | {dp} | {ep} | {fp} | {gp} | {hp} | {ip} | {jp} |\n
-                |---------------------------------------------------------------------|\n
-                | {aq} | {bq} | {cq} | {dq} | {eq} | {fq} | {gq} | {hq} | {iq} | {jq} |\n
-                |---------------------------------------------------------------------|\n
-                | {ar} | {br} | {cr} | {dr} | {er} | {fr} | {gr} | {hr} | {ir} | {jr} |\n",
+                {ai} {bi} {ci} {di} {ei} {fi} {gi} {hi} {ii} {ji}\n
+                {aj} {bj} {cj} {dj} {ej} {fj} {gj} {hj} {ij} {jj}\n
+                {ak} {bk} {ck} {dk} {ek} {fk} {gk} {hk} {ik} {jk}\n
+                {al} {bl} {cl} {dl} {el} {fl} {gl} {hl} {il} {jl}\n
+                {am} {bm} {cm} {dm} {em} {fm} {gm} {hm} {im} {jm}\n
+                {an} {bn} {cn} {dn} {en} {ffn} {gn} {hn} {iin} {jn}\n
+                {ao} {bo} {co} {doo} {eo} {fo} {go} {ho} {io} {jo}\n
+                {ap} {bp} {cp} {dp} {ep} {fp} {gp} {hp} {ip} {jp}\n
+                {aq} {bq} {cq} {dq} {eq} {fq} {gq} {hq} {iq} {jq}\n
+                {ar} {br} {cr} {dr} {er} {fr} {gr} {hr} {ir} {jr}\n",
                 ai = g.drawyourboard(0, 0), bi = g.drawyourboard(0, 1), ci = g.drawyourboard(0, 2), di = g.drawyourboard(0, 3),
                 ei = g.drawyourboard(0, 4), fi = g.drawyourboard(0, 5), gi = g.drawyourboard(0, 6), hi = g.drawyourboard(0, 7),
                 ii = g.drawyourboard(0, 8), ji = g.drawyourboard(0, 9),
