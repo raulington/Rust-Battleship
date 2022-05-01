@@ -421,4 +421,29 @@ impl Battleship {
             }
         }
     }
+    pub fn get_game_result(&self) -> Option<bool> {
+        let mut y_count = 0;
+        for vec in &self.your_board {
+            for i in vec {
+                if i.guess == true && i.empty == false {
+                    y_count = y_count + 1;
+                }
+            }
+        }
+        if y_count == 5 * K_NO5 + 4 * K_NO4 + 3 * K_NO3 + 2 * K_NO2 {
+            return Some(false);
+        }
+        let mut e_count = 0;
+        for vec in &self.enemy_board {
+            for i in vec {
+                if i.guess == true && i.empty == false {
+                    e_count = e_count + 1;
+                }
+            }
+        }
+        if e_count == 5 * K_NO5 + 4 * K_NO4 + 3 * K_NO3 + 2 * K_NO2 {
+            return Some(true);
+        }
+        return None;
+    }
 }
