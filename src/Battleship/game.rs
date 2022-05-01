@@ -111,7 +111,6 @@ impl Battleship {
             ShipPieces::Cruise =>(3,"Cruise".to_string()),
             ShipPieces::Submarine => (2,"Submarine".to_string()),
         };
-        println!("{a} {b}", a= "Player place for ",b = tuple_len_name.1);
         let mut start_pos: (usize, usize) = (0,0);
         let mut end_pos :(usize,usize) = (0,0);
         let mut done: bool = false;
@@ -288,8 +287,6 @@ impl Battleship {
                 }
             }
         }
-        println!("Finished Placing");
-
         // Finished placing
     } 
     pub fn player_place(&mut self) {
