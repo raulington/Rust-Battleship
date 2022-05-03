@@ -7,13 +7,13 @@ pub struct Battleship {
     // const kSize = 10;
     pub your_board: Vec<Vec<Node>>,
     pub enemy_board: Vec<Vec<Node>>,
+    pub easy_or_not: bool,
 }
 pub const K_SIZE: usize = 10;
 pub const K_NO5 : usize= 1; // Number of Carrier
 pub const K_NO4: usize = 1; // Number of Battleship
 pub const K_NO3: usize = 1; // Number of Cruise
 pub const K_NO2: usize = 1; // Number of Submarine
-
 
 #[derive(Debug)]
 pub struct ShipPiecesError {
@@ -69,7 +69,8 @@ impl Battleship {
         }
         let battleship = Battleship{
             your_board: your_board.clone(), 
-            enemy_board: enemy_board.clone()};
+            enemy_board: enemy_board.clone(),
+            easy_or_not: true};
         return Ok(battleship);
     }
 
@@ -392,6 +393,29 @@ impl Battleship {
         // Finished placing
     } 
     pub fn player_place(&mut self) {
+        let mut finished : bool = false;
+        while !finished {
+            println!("
+            Which difficulty do you want ?
+            1. Easy
+            2. Hard");
+            let input : String = Input::new()
+                .with_prompt(">")
+                .interact_text().unwrap();
+        
+                // Split the command line input by spaces
+            let args : Vec<&str> = input.trim().split(' ').collect();
+    
+                // If there are 0 arguments, return an error
+            if args.len() != 1 || (args[0] != "1" && args[0] != "2") {
+                println!("Bad args");
+            } else {
+                if args[0] == "2" {
+                    self.easy_or_not = false;
+                }
+                finished = true;
+            }   
+        }
         for row in 0..=K_SIZE-1 {
             for col in 0..=K_SIZE-1 {
                 if self.your_board[row][col].empty == false || self.your_board[row][col].guess == true {
