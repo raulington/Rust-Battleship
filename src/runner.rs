@@ -18,19 +18,24 @@ impl BattleshipRunner {
     }
 
     /// Handles I/O for guessing a position. (!attack)
-    fn handle_guess(&mut self, p: i32) {
+    fn handle_guess(&mut self, player_board : bool, coordinates : (i32, i32)) -> bool {
         match &mut self.game {
             Some(g) => {
-                match g.attack(p) {
-                    Ok(true) => println!("[{}] is a succesful hit!\n", p),
-                    Ok(false) => println!("[{}] is a miss.\n", p),
-                    Err(e) => println!("{}", e)
+                match g.attack(player_board, coordinates) {
+                    2 => println!("Succesful hit! Guess again! \n"),
+                    0 => println!("bad hit, try again\n"),
+                    1 => {
+                        println!("miss.\n");
+                        return false;
+                    },
+                    _ => println!("num not generated")
                 }
             },
             _ => {
-                println!("{}", BattleshipError::new(BattleshipErrorKind::GameNotStarted, p.to_string()))
+                println!("{}", BattleshipError::new(BattleshipErrorKind::GameNotStarted, "game not started".to_string()))
             }
         };
+        return true;
     }
 
     /// Handles I/O for starting a new game with a new word. (!new)
@@ -49,8 +54,6 @@ impl BattleshipRunner {
         self.game.as_mut().unwrap().player_place();
     }
 
-    /// Displays the game status including the board status, incorrect guesses,
-    /// correct guesses, and a drawing of the boards. (!status)
     fn display_status(&self) {
         match &self.game {
             Some(g) => {
@@ -144,6 +147,60 @@ impl BattleshipRunner {
         }
     }
 
+
+    fn display_self_status(&self) {
+        match &self.game {
+            Some(g) => {
+                let mut status : String = String::new();
+                status = format!("{a}", a = format!("Your Board: \n
+                {ai} {bi} {ci} {di} {ei} {fi} {gi} {hi} {ii} {ji}\n
+                {aj} {bj} {cj} {dj} {ej} {fj} {gj} {hj} {ij} {jj}\n
+                {ak} {bk} {ck} {dk} {ek} {fk} {gk} {hk} {ik} {jk}\n
+                {al} {bl} {cl} {dl} {el} {fl} {gl} {hl} {il} {jl}\n
+                {am} {bm} {cm} {dm} {em} {fm} {gm} {hm} {im} {jm}\n
+                {an} {bn} {cn} {dn} {en} {ffn} {gn} {hn} {iin} {jn}\n
+                {ao} {bo} {co} {doo} {eo} {fo} {go} {ho} {io} {jo}\n
+                {ap} {bp} {cp} {dp} {ep} {fp} {gp} {hp} {ip} {jp}\n
+                {aq} {bq} {cq} {dq} {eq} {fq} {gq} {hq} {iq} {jq}\n
+                {ar} {br} {cr} {dr} {er} {fr} {gr} {hr} {ir} {jr}\n",
+                ai = g.drawyourboard(0, 0), bi = g.drawyourboard(0, 1), ci = g.drawyourboard(0, 2), di = g.drawyourboard(0, 3),
+                ei = g.drawyourboard(0, 4), fi = g.drawyourboard(0, 5), gi = g.drawyourboard(0, 6), hi = g.drawyourboard(0, 7),
+                ii = g.drawyourboard(0, 8), ji = g.drawyourboard(0, 9),
+                aj = g.drawyourboard(1, 0), bj = g.drawyourboard(1, 1), cj = g.drawyourboard(1, 2), dj = g.drawyourboard(1, 3),
+                ej = g.drawyourboard(1, 4), fj = g.drawyourboard(1, 5), gj = g.drawyourboard(1, 6), hj = g.drawyourboard(1, 7),
+                ij = g.drawyourboard(1, 8), jj = g.drawyourboard(1, 9),
+                ak = g.drawyourboard(2, 0), bk = g.drawyourboard(2, 1), ck = g.drawyourboard(2, 2), dk = g.drawyourboard(2, 3),
+                ek = g.drawyourboard(2, 4), fk = g.drawyourboard(2, 5), gk = g.drawyourboard(2, 6), hk = g.drawyourboard(2, 7),
+                ik = g.drawyourboard(2, 8), jk = g.drawyourboard(2, 9),
+                al = g.drawyourboard(3, 0), bl = g.drawyourboard(3, 1), cl = g.drawyourboard(3, 2), dl = g.drawyourboard(3, 3),
+                el = g.drawyourboard(3, 4), fl = g.drawyourboard(3, 5), gl = g.drawyourboard(3, 6), hl = g.drawyourboard(3, 7),
+                il = g.drawyourboard(3, 8), jl = g.drawyourboard(3, 9),
+                am = g.drawyourboard(4, 0), bm = g.drawyourboard(4, 1), cm = g.drawyourboard(4, 2), dm = g.drawyourboard(4, 3),
+                em = g.drawyourboard(4, 4), fm = g.drawyourboard(4, 5), gm = g.drawyourboard(4, 6), hm = g.drawyourboard(4, 7),
+                im = g.drawyourboard(4, 8), jm = g.drawyourboard(4, 9),
+                an = g.drawyourboard(5, 0), bn = g.drawyourboard(5, 1), cn = g.drawyourboard(5, 2), dn = g.drawyourboard(5, 3),
+                en = g.drawyourboard(5, 4), ffn = g.drawyourboard(5, 5), gn = g.drawyourboard(5, 6), hn = g.drawyourboard(5, 7),
+                iin = g.drawyourboard(5, 8), jn = g.drawyourboard(5, 9),
+                ao = g.drawyourboard(6, 0), bo = g.drawyourboard(6, 1), co = g.drawyourboard(6, 2), doo = g.drawyourboard(6, 3),
+                eo = g.drawyourboard(6, 4), fo = g.drawyourboard(6, 5), go = g.drawyourboard(6, 6), ho = g.drawyourboard(6, 7),
+                io = g.drawyourboard(6, 8), jo = g.drawyourboard(6, 9),
+                ap = g.drawyourboard(7, 0), bp = g.drawyourboard(7, 1), cp = g.drawyourboard(7, 2), dp = g.drawyourboard(7, 3),
+                ep = g.drawyourboard(7, 4), fp = g.drawyourboard(7, 5), gp = g.drawyourboard(7, 6), hp = g.drawyourboard(7, 7),
+                ip = g.drawyourboard(7, 8), jp = g.drawyourboard(7, 9),
+                aq = g.drawyourboard(8, 0), bq = g.drawyourboard(8, 1), cq = g.drawyourboard(8, 2), dq = g.drawyourboard(8, 3),
+                eq = g.drawyourboard(8, 4), fq = g.drawyourboard(8, 5), gq = g.drawyourboard(8, 6), hq = g.drawyourboard(8, 7),
+                iq = g.drawyourboard(8, 8), jq = g.drawyourboard(8, 9),
+                ar = g.drawyourboard(9, 0), br = g.drawyourboard(9, 1), cr = g.drawyourboard(9, 2), dr = g.drawyourboard(9, 3),
+                er = g.drawyourboard(9, 4), fr = g.drawyourboard(9, 5), gr = g.drawyourboard(9, 6), hr = g.drawyourboard(9, 7),
+                ir = g.drawyourboard(9, 8), jr = g.drawyourboard(9, 9)
+                ));
+                println!("{}", status);
+            },
+            _ => {}
+        }
+    }
+
+
     fn display_help(&self) {
         println!("!new: starts a new game.\n!attack [i32]: \
             guesses the position of an enemy battleship in the current game.\n!status: \
@@ -173,14 +230,23 @@ impl BattleshipRunner {
             // match the first word in the command line input (the command)
             match args[0] {
                 "!attack" => {
-                    // if args.len() == 2 {
-                    //     match args[1].chars().to_string()).parse::<i32>() {
-                    //         Some(x) if args[1].len() == 1 => self.handle_guess(x),
-                    //         _  => println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!{"{:?}", args}));
-                    //     };
-                    // } else {
-                    //     println!("{}", BattleshipError::new(BattleshipErrorKind::ArgError, format!("{:?}", args)));
-                    // }
+                    let mut repeat_guess = true;
+                    let mut spot = args[1];
+                    while repeat_guess == true {
+                        let coords = coordinate_converter(spot).unwrap();
+                        let outcome = self.handle_guess(true, coords);
+                        if outcome == true {
+                            self.display_self_status();
+                            println!("your next attack:");
+                            let inp : String = Input::new()
+                                .with_prompt(">")
+                                .interact_text()?;
+                            spot = &inp;
+                        } else {
+                            repeat_guess = false;
+                        }
+                    }
+                    continue;
                 },
                 "!status" => {
                     self.display_status();

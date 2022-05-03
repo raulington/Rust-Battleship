@@ -93,34 +93,6 @@ impl Battleship {
 
 
 
-    // Attack Function - Joseph
-    //  1. Guessing right prints "Hit" and Node at your enemy's board will be updated
-    // 2. Guessing wrong prints "Miss" and Node at your enemy's board will be updated
-    pub fn attack(&mut self, player_board : bool, coordinates : (i32, i32)) -> i32 {
-        let row = coordinates.0 as usize;
-        let col = coordinates.1 as usize;
-
-        if player_board == true {
-            if self.your_board[row][col].guess == true { //if spot was already guessed
-                return 0;
-            } 
-            self.your_board[row][col].guess = true;
-            if self.your_board[row][col].empty == true { //no ship was on that spot
-                return 1;
-            }
-        } else if player_board == false {
-            if self.enemy_board[row][col].guess == true { //if spot was already guessed
-                return 0;
-            } 
-            self.enemy_board[row][col].guess = true;
-            if self.enemy_board[row][col].empty == true { //no ship was on that spot
-                return 1;
-            }
-        }
-        
-        return 2;
-    }
-
     pub fn coordinate_converter(coord: &str) -> Result<(i32, i32), ()> {
         let mut all : Vec<char> = Vec::new();
         for i in 0..coord.len() {
@@ -193,11 +165,38 @@ impl Battleship {
             _ => return Err(())
         }
     
-        // println!("Letter coordinate: {} => {}", variables[0], letter);
-        // println!("number coordinate: {} => {}", num+1, num);
-    
         return Ok((letter, num));
     }
+
+    // Attack Function - Joseph
+    //  1. Guessing right prints "Hit" and Node at your enemy's board will be updated
+    // 2. Guessing wrong prints "Miss" and Node at your enemy's board will be updated
+    pub fn attack(&mut self, player_board : bool, coordinates : (i32, i32)) -> i32 {
+        let row = coordinates.0 as usize;
+        let col = coordinates.1 as usize;
+
+        if player_board == true {
+            if self.your_board[row][col].guess == true { //if spot was already guessed
+                return 0;
+            } 
+            self.your_board[row][col].guess = true;
+            if self.your_board[row][col].empty == true { //no ship was on that spot
+                return 1;
+            }
+        } else if player_board == false {
+            if self.enemy_board[row][col].guess == true { //if spot was already guessed
+                return 0;
+            } 
+            self.enemy_board[row][col].guess = true;
+            if self.enemy_board[row][col].empty == true { //no ship was on that spot
+                return 1;
+            }
+        }
+        
+        return 2;
+    }
+
+    
 
 
 

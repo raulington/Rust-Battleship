@@ -15,6 +15,7 @@ pub fn coordinate_converter(coord: &str) -> Result<(i32, i32), ()> {
             variables.push(all[i]);
         }
     }
+
     let mut num: i32 = -1;
     if variables.len() != 2 && variables.len() != 3 {
         return Err(());
@@ -53,10 +54,6 @@ pub fn coordinate_converter(coord: &str) -> Result<(i32, i32), ()> {
         }
     }
 
-    // for i in 0..variables.len() {
-    //     println!("{}", variables[i]);
-    // }
-
     let mut letter: i32;
 
     match variables[0] {
@@ -73,8 +70,8 @@ pub fn coordinate_converter(coord: &str) -> Result<(i32, i32), ()> {
         _ => return Err(())
     }
 
-    println!("Letter coordinate: {} => {}", variables[0], letter);
-    println!("number coordinate: {} => {}", num+1, num);
+    // println!("Letter coordinate: {} => {}", variables[0], letter);
+    // println!("number coordinate: {} => {}", num+1, num);
 
     return Ok((letter, num));
 }
