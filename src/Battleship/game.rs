@@ -93,7 +93,7 @@ impl Battleship {
     }
 
 
-
+    
     
 
     // Attack Function - Joseph

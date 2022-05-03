@@ -1,7 +1,7 @@
 use dialoguer::Input;
 use crate::Battleship::game::*;
 use crate::Battleship::error::*;
-
+use rand::Rng;
 
 /// Runs a Battleship game on the command line.
 #[derive(Debug, Default)]
@@ -22,8 +22,8 @@ impl BattleshipRunner {
         match &mut self.game {
             Some(g) => {
                 match g.attack(player_board, coordinates) {
-                    2 => println!("Succesful hit! Guess again! \n"),
-                    0 => println!("bad hit, try again\n"),
+                    2 => println!("Succesful hit! \n"),
+                    0 => println!("bad hit \n"),
                     1 => {
                         println!("miss.\n");
                         return false;
@@ -305,22 +305,13 @@ impl BattleshipRunner {
             // match the first word in the command line input (the command)
             match args[0] {
                 "!attack" => {
-                    let mut repeat_guess = true;
+                    let mut rng = rand::thread_rng();
                     let mut spot = args[1];
-                    while repeat_guess == true {
-                        let coords = self.coordinate_converter(spot).unwrap();
-                        let outcome = self.handle_guess(true, coords);
-                        if outcome == true {
-                            self.display_self_status();
-                            println!("your next attack:");
-                            let inp : String = Input::new()
-                                .with_prompt(">")
-                                .interact_text()?;
-                            spot = &inp;
-                        } else {
-                            repeat_guess = false;
-                        }
-                    }
+                    let coords = self.coordinate_converter(spot).unwrap();
+                    let outcome = self.handle_guess(true, coords);
+                    let a = rng.gen_range(0..10);
+                    let b = rng.gen_range(0..10);
+                    let cpuoutcome = self.handle_guess(false, (a,b));
                     continue;
                 },
                 "!status" => {
@@ -342,24 +333,24 @@ impl BattleshipRunner {
                     continue;
                 }
             };
-            // match &self.game {
-            //     Some(g) => {
-            //         match g.get_game_result() {
-            //             Some(true) => {
-            //                 println!("Game Over. The player wins!\n");
-            //             },
-            //             Some(false) => {
-            //                 println!("Game Over. The player loses.\n");
-            //             }
-            //             _ => {
-            //                 if self.verbose {
-            //                     self.display_status();
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     _ => {}
-            // };
+            match &self.game {
+                Some(g) => {
+                    match g.get_game_result() {
+                        Some(true) => {
+                            println!("Game Over. The player wins!\n");
+                        },
+                        Some(false) => {
+                            println!("Game Over. The player loses.\n");
+                        }
+                        _ => {
+                            if self.verbose {
+                                self.display_status();
+                            }
+                        }
+                    }
+                },
+                _ => {}
+            };
         }
     }
 }
