@@ -80,22 +80,22 @@ impl Battleship {
         if n.empty == false && n.guess == false {
             return '🚢';
         } else if n.empty == false && n.guess == true {
-            return 'X';
+            return '❌';
         } else if n.empty == true && n.guess == true {
-            return 'O';
+            return '🔘';
         }
-        return '.';
+        return '🌊';
         // Usign color to make it looks better
     } 
 
     pub fn drawenemyboard(&self, i: usize, j: usize) -> char {
         let n = self.enemy_board.get(i).unwrap().get(j).unwrap();
         if n.guess == true && n.empty == false {
-            return 'X';
+            return '❌';
         } else if n.guess == true && n.empty == true {
-            return 'O';
+            return '🔘';
         }
-        return '.';
+        return '🌊';
     }
 
 
