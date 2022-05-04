@@ -78,7 +78,7 @@ impl Battleship {
     pub fn drawyourboard(&self, i: usize, j: usize) -> char {
         let n = self.your_board.get(i).unwrap().get(j).unwrap();
         if n.empty == false && n.guess == false {
-            return 'S';
+            return '🚢';
         } else if n.empty == false && n.guess == true {
             return 'X';
         } else if n.empty == true && n.guess == true {
