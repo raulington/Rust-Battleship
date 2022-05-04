@@ -77,10 +77,14 @@ impl Battleship {
     // Returns X is guess is true and empty is false, O is guess is false
     pub fn drawyourboard(&self, i: usize, j: usize) -> char {
         let n = self.your_board.get(i).unwrap().get(j).unwrap();
-        if n.guess == true && n.empty == false {
+        if n.empty == false && n.guess == false {
+            return 'S';
+        } else if n.empty == false && n.guess == true {
             return 'X';
+        } else if n.empty == true && n.guess == true {
+            return 'O';
         }
-        return 'O';
+        return '.';
         // Usign color to make it looks better
     } 
 
@@ -88,12 +92,14 @@ impl Battleship {
         let n = self.enemy_board.get(i).unwrap().get(j).unwrap();
         if n.guess == true && n.empty == false {
             return 'X';
+        } else if n.guess == true && n.empty == true {
+            return 'O';
         }
-        return 'O';
+        return '.';
     }
 
 
-    
+
     
 
     // Attack Function - Joseph
@@ -124,7 +130,23 @@ impl Battleship {
         return 2;
     }
 
-    
+    pub fn easy_attack(&mut self) -> (i32, i32) {
+        let mut rng = rand::thread_rng();
+        let mut a = rng.gen_range(0..10);
+        let mut b = rng.gen_range(0..10);
+        while (self.your_board[a][b].guess == true) {
+            a = rng.gen_range(0..10);
+            b = rng.gen_range(0..10);
+        }
+        return (a as i32,b as i32);
+    }
+
+    pub fn cpu_attack(&mut self) -> (i32, i32) {
+        if self.easy_or_not == true {
+            return self.easy_attack();
+        }
+        return self.easy_attack(); // change later when other ai is added. 
+    }
 
 
 

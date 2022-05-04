@@ -38,6 +38,18 @@ impl BattleshipRunner {
         return true;
     }
 
+    fn handle_cpu_guess(&mut self) -> (i32, i32) {
+        match &mut self.game {
+            Some(g) => {
+                return g.cpu_attack();
+            },
+            _ => {
+                println!("{}", BattleshipError::new(BattleshipErrorKind::GameNotStarted, "game not started".to_string()))
+            }
+        };
+        return (0,0);
+    }
+
     /// Handles I/O for starting a new game with a new word. (!new)
     fn handle_new(&mut self) {
         self.game = match Battleship::new() {
@@ -305,13 +317,11 @@ impl BattleshipRunner {
             // match the first word in the command line input (the command)
             match args[0] {
                 "!attack" => {
-                    let mut rng = rand::thread_rng();
                     let mut spot = args[1];
                     let coords = self.coordinate_converter(spot).unwrap();
-                    let outcome = self.handle_guess(true, coords);
-                    let a = rng.gen_range(0..10);
-                    let b = rng.gen_range(0..10);
-                    let cpuoutcome = self.handle_guess(false, (a,b));
+                    let outcome = self.handle_guess(false, coords);
+                    let cpucoords = self.handle_cpu_guess();
+                    let cpuoutcome = self.handle_guess(true, cpucoords);
                     continue;
                 },
                 "!status" => {
