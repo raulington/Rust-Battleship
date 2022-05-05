@@ -12,7 +12,7 @@ pub struct Battleship {
 pub const K_SIZE: usize = 10;
 pub const K_NO5 : usize= 1; // Number of Carrier
 pub const K_NO4: usize = 1; // Number of Battleship
-pub const K_NO3: usize = 1; // Number of Cruise
+pub const K_NO3: usize = 1; // Number of Cruiser
 pub const K_NO2: usize = 1; // Number of Submarine
 
 #[derive(Debug)]
@@ -34,14 +34,15 @@ impl std::fmt::Display for ShipPiecesError {
 pub enum ShipPieces {
     Carrier, // size 5
     Battleship, // size 4
-    Cruise, // size 3
+    Cruiser, // size 3
     Submarine // size 2
 }
 
-#[derive(Debug,Clone,Copy)]
+#[derive(Debug,Clone)] // maybe include Copy in the list if needed
 pub struct Node {
     guess: bool,
     empty: bool,
+    ship: String,
 }
 
 impl Battleship {
@@ -54,6 +55,7 @@ impl Battleship {
                 let n = Node {
                     guess: false,
                     empty : true,
+                    ship : "none".to_string(),
                 };
                 vec.push(n);
             }
@@ -63,6 +65,7 @@ impl Battleship {
                 let n = Node {
                     guess: false,
                     empty : true,
+                    ship : "none".to_string(),
                 };
                 vec.push(n);
             }
@@ -78,7 +81,7 @@ impl Battleship {
     pub fn drawyourboard(&self, i: usize, j: usize) -> char {
         let n = self.your_board.get(i).unwrap().get(j).unwrap();
         if n.empty == false && n.guess == false {
-            return '🚢';
+            return '⬛';
         } else if n.empty == false && n.guess == true {
             return '❌';
         } else if n.empty == true && n.guess == true {
@@ -109,25 +112,84 @@ impl Battleship {
         let row = coordinates.0 as usize;
         let col = coordinates.1 as usize;
 
+        // println!("{}", self.enemy_board[row][col].ship.clone());
+
         if player_board == true {
+            
             if self.your_board[row][col].guess == true { //if spot was already guessed
                 return 0;
             } 
+            let currently_sunk = self.is_sunk(player_board, self.your_board[row][col].ship.clone());
             self.your_board[row][col].guess = true;
             if self.your_board[row][col].empty == true { //no ship was on that spot
+                println!("The CPU missed");
                 return 1;
+            } // if a ship was on that spot...
+            
+            println!("The CPU hit your {}!", self.your_board[row][col].ship);
+            if self.is_sunk(player_board, self.your_board[row][col].ship.clone()) && currently_sunk == false {
+                println!("Your {} got sunk!", self.your_board[row][col].ship.clone());
             }
         } else if player_board == false {
             if self.enemy_board[row][col].guess == true { //if spot was already guessed
+                println!("That spot was already guessed");
                 return 0;
             } 
+            let currently_sunk = self.is_sunk(player_board, self.enemy_board[row][col].ship.clone());
             self.enemy_board[row][col].guess = true;
             if self.enemy_board[row][col].empty == true { //no ship was on that spot
+                println!("Your hit missed");
                 return 1;
+            }
+
+            println!("Your hit was successful!");
+            if self.is_sunk(player_board, self.enemy_board[row][col].ship.clone()) && currently_sunk == false {
+                println!("You sunk your opponents' {}!!!", self.enemy_board[row][col].ship.clone());
             }
         }
         
         return 2;
+    }
+
+    pub fn is_sunk(&mut self, player_board : bool, ship: String) -> bool {
+        let mut count_left = 0;
+        if (ship == "Carrier".to_string()) {
+            count_left = 5;
+        } else if (ship == "Battleship".to_string()) {
+            count_left = 4;
+        } else if (ship == "Cruiser".to_string()) {
+            count_left = 3;
+        } else if (ship == "Submarine".to_string()) {
+            count_left = 2;
+        } else {
+            return false;
+            println!("NOT FOUND in is_sunk");
+        }
+        
+        // match ship {
+        //     "Carrier" => count_left = 5,
+        //     "Battleship" => count_left = 4,
+        //     "Cruiser" => count_left = 3,
+        //     "Submarine" => count_left = 2,
+        //     _ => println!("ship type not found")
+        // };
+        for row in 0..9 {
+            for col in 0..9 {
+                if player_board {
+                    if self.your_board[row][col].ship == ship && self.your_board[row][col].guess == true {
+                        count_left = count_left - 1;
+                    }
+                } else {
+                    if self.enemy_board[row][col].ship == ship && self.enemy_board[row][col].guess == true {
+                        count_left = count_left - 1;
+                    }
+                }
+            }
+        }
+        if count_left == 0 {
+            return true;
+        }
+        return false;
     }
 
     pub fn easy_attack(&mut self) -> (i32, i32) {
@@ -160,7 +222,7 @@ impl Battleship {
         let tuple_len_name : (usize,String) = match  ship_type {
             ShipPieces::Carrier => (5, "Carrier".to_string()),
             ShipPieces::Battleship => (4,"Battleship".to_string()),
-            ShipPieces::Cruise =>(3,"Cruise".to_string()),
+            ShipPieces::Cruiser =>(3,"Cruiser".to_string()),
             ShipPieces::Submarine => (2,"Submarine".to_string()),
         };
         let mut start_pos: (usize, usize) = (0,0);
@@ -321,21 +383,29 @@ impl Battleship {
         if start_pos.0 == end_pos.0 {
             if start_pos.1 < end_pos.1 {
                 for _i in start_pos.1..end_pos.1+1 {
+                    self.your_board[start_pos.0][_i].ship = tuple_len_name.1.clone();// tuple_len_name.1.clone();
                     self.your_board[start_pos.0][_i].empty = false;
+                    
                 }
             } else {
                 for _i in end_pos.1..start_pos.1+1 {
+                    self.your_board[start_pos.0][_i].ship = tuple_len_name.1.clone();// tuple_len_name.1.clone();
                     self.your_board[start_pos.0][_i].empty = false;
+                    
                 }
             }
         } else {
             if start_pos.0 < end_pos.0 {
                 for _i in start_pos.0..end_pos.0+1 {
+                    self.your_board[_i][start_pos.1].ship = tuple_len_name.1.clone();// tuple_len_name.1.clone();
                     self.your_board[_i][start_pos.1].empty = false;
+                    
                 }
             } else {
                 for _i in end_pos.0..start_pos.0+1 {
+                    self.your_board[_i][start_pos.1].ship = tuple_len_name.1.clone(); //tuple_len_name.1.clone();
                     self.your_board[_i][start_pos.1].empty = false;
+                    
                 }
             }
         }
@@ -379,7 +449,7 @@ impl Battleship {
             Battleship::player_place_1_ship(self,ShipPieces::Battleship);
         }
         for _i in 0..K_NO3{
-            Battleship::player_place_1_ship(self,ShipPieces::Cruise);
+            Battleship::player_place_1_ship(self,ShipPieces::Cruiser);
         }
         for _i in 0..K_NO2{
             Battleship::player_place_1_ship(self,ShipPieces::Submarine);
@@ -401,7 +471,7 @@ impl Battleship {
             Battleship::cpu_place_1_ship(self,ShipPieces::Battleship);
         }
         for _i in 0..K_NO3{
-            Battleship::cpu_place_1_ship(self,ShipPieces::Cruise);
+            Battleship::cpu_place_1_ship(self,ShipPieces::Cruiser);
         }
         for _i in 0..K_NO2{
             Battleship::cpu_place_1_ship(self,ShipPieces::Submarine);
@@ -414,7 +484,7 @@ impl Battleship {
         let tuple_len_name : (usize,String) = match  ship_type {
             ShipPieces::Carrier => (5, "Carrier".to_string()),
             ShipPieces::Battleship => (4,"Battleship".to_string()),
-            ShipPieces::Cruise =>(3,"Cruise".to_string()),
+            ShipPieces::Cruiser =>(3,"Cruiser".to_string()),
             ShipPieces::Submarine => (2,"Submarine".to_string()),
         };
         let len = tuple_len_name.0;
@@ -436,6 +506,7 @@ impl Battleship {
                         if a {
                             for i in 0..=len-1 {
                                 self.enemy_board[row_start -i][col_start].empty = false;
+                                self.enemy_board[row_start -i][col_start].ship = tuple_len_name.1.clone();
                             }
                             finished = true;
                         }
@@ -452,6 +523,7 @@ impl Battleship {
                         if a {
                             for i in 0..=len-1 {
                                 self.enemy_board[row_start + i][col_start].empty = false;
+                                self.enemy_board[row_start + i][col_start].ship = tuple_len_name.1.clone();
                             }
                             finished = true;
                         }
@@ -468,6 +540,7 @@ impl Battleship {
                         if a {
                             for i in 0..=len-1 {
                                 self.enemy_board[row_start][col_start - i].empty = false;
+                                self.enemy_board[row_start][col_start - i].ship = tuple_len_name.1.clone();
                             }
                             finished = true;
                         }
@@ -484,6 +557,7 @@ impl Battleship {
                         if a {
                             for i in 0..=len-1 {
                                 self.enemy_board[row_start ][col_start+i].empty = false;
+                                self.enemy_board[row_start ][col_start+i].ship = tuple_len_name.1.clone();
                             }
                             finished = true;
                         }
