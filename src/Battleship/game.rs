@@ -132,7 +132,7 @@ impl Battleship {
             }
         } else if player_board == false {
             if self.enemy_board[row][col].guess == true { //if spot was already guessed
-                println!("That spot was already guessed");
+                println!("That spot was already guessed, '!attack ___' again");
                 return 0;
             } 
             let currently_sunk = self.is_sunk(player_board, self.enemy_board[row][col].ship.clone());
@@ -144,7 +144,7 @@ impl Battleship {
 
             println!("Your hit was successful!");
             if self.is_sunk(player_board, self.enemy_board[row][col].ship.clone()) && currently_sunk == false {
-                println!("You sunk your opponents' {}!!!", self.enemy_board[row][col].ship.clone());
+                println!("You sunk your opponent's {}!!!", self.enemy_board[row][col].ship.clone());
             }
         }
         
@@ -165,14 +165,7 @@ impl Battleship {
             return false;
             println!("NOT FOUND in is_sunk");
         }
-        
-        // match ship {
-        //     "Carrier" => count_left = 5,
-        //     "Battleship" => count_left = 4,
-        //     "Cruiser" => count_left = 3,
-        //     "Submarine" => count_left = 2,
-        //     _ => println!("ship type not found")
-        // };
+
         for row in 0..9 {
             for col in 0..9 {
                 if player_board {
@@ -186,13 +179,14 @@ impl Battleship {
                 }
             }
         }
+
         if count_left == 0 {
             return true;
         }
         return false;
     }
 
-    pub fn easy_attack(&mut self) -> (i32, i32) {
+    pub fn random_attack(&mut self) -> (i32, i32) {
         let mut rng = rand::thread_rng();
         let mut a = rng.gen_range(0..10);
         let mut b = rng.gen_range(0..10);
@@ -203,14 +197,181 @@ impl Battleship {
         return (a as i32,b as i32);
     }
 
-    pub fn cpu_attack(&mut self) -> (i32, i32) {
-        if self.easy_or_not == true {
-            return self.easy_attack();
+    pub fn unsunk_ships(&mut self) -> bool {
+        for row in 0..9 {
+            for col in 0..9 {
+                if self.your_board[row][col].guess == true && self.your_board[row][col].ship != "none".to_string() {
+                    if self.is_sunk(true, self.your_board[row][col].ship.clone()) == false {
+                        return true;
+                    }
+                }
+            }
         }
-        return self.easy_attack(); // change later when other ai is added. 
+        return false;
+    }
+
+    pub fn hit_is_alone(&mut self, coordinates: (i32, i32)) -> bool {
+        let row = coordinates.0 as usize;
+        let col = coordinates.1 as usize;
+        if (row > 0) {
+            if self.your_board[row - 1][col].guess && self.your_board[row-1][col].ship != "none".to_string() {
+                return false;
+            }
+        }
+        if (row < 9) {
+            if self.your_board[row + 1][col].guess && self.your_board[row+1][col].ship != "none".to_string() {
+                return false;
+            }
+        }
+        if (col > 0) {
+            if self.your_board[row][col - 1].guess && self.your_board[row][col-1].ship != "none".to_string() {
+                return false;
+            }
+        }
+        if (col < 9) {
+            if self.your_board[row][col - 1].guess && self.your_board[row][col+1].ship != "none".to_string() {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    pub fn surround_options(&mut self, coordinates: (i32, i32), option: i32) -> (i32, i32) {
+        let row = coordinates.0 as usize;
+        let col = coordinates.1 as usize;
+        let row_ = coordinates.0;
+        let col_ = coordinates.1;
+
+        if option == 1 {
+            if (row > 0) {
+                if self.your_board[row - 1][col].guess == false {
+                    println!("option 1 was chosen");
+                    return (row_-1, col_);
+                }
+            }
+            return ((-1, -1));
+        } else if option == 2 {
+            if (row < 9) {
+                if self.your_board[row + 1][col].guess == false {
+                    println!("option 2 was chosen");
+                    return (row_+1, col_);
+                }
+            }
+            return ((-1, -1));
+        } else if option == 3 {
+            if (col > 0) {
+                if self.your_board[row][col - 1].guess == false {
+                    println!("option 3 was chosen");
+                    return (row_, col_-1);
+                }
+            }
+            return ((-1, -1));
+        } else {
+            if (col < 9) {
+                if self.your_board[row][col + 1].guess == false {
+                    println!("option 4 was chosen");
+                    return (row_, col_+1);
+                }
+            }
+        }
+        return ((-1, -1));
     }
 
 
+    pub fn surround_alone(&mut self, coordinates: (i32, i32)) -> (i32, i32) {
+        let row = coordinates.0 as usize;
+        let col = coordinates.1 as usize;
+        let row_ = coordinates.0;
+        let col_ = coordinates.1;
+
+        let mut rng = rand::thread_rng();
+        let mut a = rng.gen_range(0..5);
+
+        let mut coords = self.surround_options(coordinates, a as i32);
+
+        while coords == (-1, -1) {
+            a = rng.gen_range(0..5);
+            coords = self.surround_options(coordinates, a as i32);
+        }
+
+
+
+        return coords;
+    }
+
+    pub fn coordinate_of_interest(&mut self) -> (i32, i32) {
+        for row in 0..9 {
+            for col in 0..9 {
+                if self.your_board[row][col].guess == true && self.your_board[row][col].ship != "none".to_string() {
+                    if self.is_sunk(true, self.your_board[row][col].ship.clone()) == false {
+                        return ((row as i32, col as i32));
+                    }
+                }
+            }
+        }
+        println!("Error in Coord of Interest");
+        return ((-1, -1));
+    }
+
+    pub fn ship_is_vertical(&mut self, coordinates: (i32, i32)) -> bool {
+        let row = coordinates.0 as usize;
+        let col = coordinates.1 as usize;
+        if self.your_board[row+1][col].ship.clone() == self.your_board[row][col].ship.clone() {
+            return true;
+        }
+        return false;
+    }
+
+    pub fn next_ship_coords(&mut self, ship: String) -> (i32, i32) {
+        for row in 0..9 {
+            for col in 0..9 {
+                if self.your_board[row][col].ship == ship && self.your_board[row][col].guess == false {
+                    return ((row as i32, col as i32));
+                }
+            }
+        }
+        println!("Error in next ship coords()");
+        return (-1, -1);
+    }
+
+    pub fn continue_attack(&mut self, coords: (i32, i32)) -> (i32, i32) {
+        let row = coords.0 as usize;
+        let col = coords.1 as usize;
+        if self.ship_is_vertical(coords) {
+            if row > 0 {
+                if self.your_board[row-1][col].guess == false {
+                    return ((coords.0 - 1, coords.1));
+                } 
+            }
+            return self.next_ship_coords(self.your_board[row][col].ship.clone());
+        } // if ship is horizontal...
+        if col > 0 {
+            if self.your_board[row][col-1].guess == false {
+                return ((coords.0, coords.1 - 1));
+            } 
+        }
+        return self.next_ship_coords(self.your_board[row][col].ship.clone());
+    }
+
+    pub fn difficult_attack(&mut self) -> (i32, i32) {
+        if self.unsunk_ships() == true { // if a ship was hit but not sunk yet
+            let coords = self.coordinate_of_interest();
+            if self.hit_is_alone(coords) { // if the hit is alone
+                return self.surround_alone(coords); // scope around it to find next piece
+            }
+            return self.continue_attack(coords);
+        }
+        return self.random_attack();
+    }
+
+    pub fn cpu_attack(&mut self) -> (i32, i32) {
+        if self.easy_or_not == true {
+            return self.random_attack();
+        }
+        return self.difficult_attack(); // change later when other ai is added. 
+    }
+
+    
 
     // Place Function (battleship piece generic (ex: ShipPieces::Carrier)
     //    1. Make it so that you are forced to keep placing until you have used all of your pieces
